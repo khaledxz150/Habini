@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "998044266150",
+    "project_id": "abini-199cc",
+    "storage_bucket": "abini-199cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998044266150:android:3a0684396722ddf4f8ce67",
+        "android_client_info": {
+          "package_name": "io.launchclub.habini"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998044266150-2tcjvpo00mf99ggqubh72tf165f1mspv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm3HdW-Rw2qGg030P-25lUrEdfVypQF3Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998044266150-2tcjvpo00mf99ggqubh72tf165f1mspv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

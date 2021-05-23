@@ -22,7 +22,7 @@ class habini extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: WelcomeScreen(),
-      initialRoute: 'navigation_page',
+      initialRoute: 'welcome_screen',
       routes: {
         'save_user_data': (context) => SaveUserData(),
         'welcome_screen': (context) => WelcomeScreen(),

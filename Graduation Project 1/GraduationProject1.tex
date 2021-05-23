@@ -1,0 +1,133 @@
+\documentclass[12pt]{article}
+\usepackage{flafter}
+\usepackage{titlesec}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[mark=]{sectionbreak}
+\usepackage{lipsum}
+\usepackage{setspace}
+\usepackage{titlesec}
+
+\titleformat*{\section}{\LARGE\bfseries}
+
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\usepackage{tree-dvips}
+\author{
+  Khaled Abulawi\\
+  \texttt{1531904}
+  \and
+  Ahmad J Alsoub\\
+  \texttt{1837661}
+  \and
+  AL-Motasem Alamleh\\
+  \texttt{1834683}
+  \and
+  \texttt{Supervised by, Dr.Aladdin Hussein Baarah}}
+\date{\today}
+\title{Graduation Project 5abini}
+
+\raggedbottom
+
+\begin{document}
+
+\maketitle
+\vspace{-20mm}
+\tableofcontents
+
+
+
+
+
+
+
+
+
+
+\section{Introduction}
+\subsection{Problem statement}
+Most social media platform are geared toward talking to people you already, or at least know they have something in common with you. There isn't a platform that allows you to share something that's not common between people and still get reactions and have some interactive experiences, as most there is a program as far as we can tell that links the posts you see geographically, there's features in some apps, but at that point the time line is so bloated that there's isn't roam for your niches.\\ 
+\subsection{Objective}
+5abini is an app that was built while focusing on privacy and intention to gather people with no social fear or anxiety. To  build an environment with confidence in confidentiality that allows you to share what you love, care about, ask questions and help people who do so. 5abini is geared into anonymous interactions, that will remove fear of social criticism and anxiety, as who you are will never be unknown. Make friends, get knowledge and share yours!
+\sectionbreak
+
+
+
+\sectionbreak
+\section{literature review}
+\subsection{The effects on anxiety}
+The findings suggest that the cognitive and behavioral processes that characterize socially anxious face-to-face interaction are also evident in online communication. Suggestions are made for the clinical implications of such findings.\cite{firstone} sss
+\subsection{Privacy and Confidentiality}
+Most of the social media sites have information that's required, like your birthday and email address. Identity thieves tend to gather their victims’s personal information from the information available on the social media sites. They argue there is a persistent confusion between these two concepts and that privacy is an important but neglected ethical concept within human services. Many identity thieves tend to hack their victims email accounts by simply using the personal information available on social media profile.\cite{Confidentiality}
+
+
+\section{Requirement Elicitation}
+In this sections, many argue requirement elicitation is the most important in creating software, we will be using approaches proposed by Alexander and Beus-Dukic.
+
+\subsection{Identifying stakeholders} 
+First of all, we have to identify the stakeholders (Clients), but as we (the participants) are the only Stakeholders, the elicitation we'll be conducted in methods that allow us to bring forth Ideas that will be as if they are requested by the client.
+\subsection{Modeling the context (SCOPE)}
+Before any step, we have to know what we're stepping into.
+We had to understand and set the environment the Software and we will be working in. As the creators and developers, 
+We had to always keep in mind that we'll be working inside the campus of Hashemite University, with the students and being our customers and users.
+\subsection{Identifying scenarios and brainstorming}
+We used hypothetical scenarios that users may go through, we asked ourselves what will they expect, how would they navigate, and what will they react to and focus on the most.
+We'll see later on how this helped us build our user case.
+\subsection{Analyzing priorities}
+Priorities is a name we can easily replace "5abini" with, as it's already (as a software) geared into something very specific, we had no problems in seeing what should we focus on and what would our user base care about.
+\section{Requirements}
+\subsection{User requirements}
+\begin{enumerate}
+\itemsep0em 
+\item User shall be able to sign up.
+\item User shall be able to select an academy.
+\item User Shall be able to select their major.
+\item User shall be able to post.
+\item User shall be able to delete their posts.
+\item User shall be able to delete their comments.
+\item User shall delete any comments on their posts.
+\item User shall be able to report Posts.
+\item User shall be able to report comments.
+\item User shall be able to up-vote posts.
+\item User shall be able to down-vote posts.
+\item User shall be able to up-vote comments.
+\item User shall be able to down-vote comments.
+\item User shall be able to search for posts he's interested in, through Hash-tags or keywords.
+\item User shall be named “Poster” when they post.
+\item User shall be Assigned a “Name” that reflects their position in the post, the first time they interact.
+\item User shall be able to track their activities.
+\item User shall be able to track activities on their posts.
+\item User shall be able to track activities on their comments.
+\item User shall be able to review posts from other users.
+\item User shall be able to sign out.
+
+\end{enumerate}
+\subsection{System Requirements}
+\begin{enumerate}
+\item User shall be able to sign up using their University number and Email address.
+\item User will have to confirm their identity with an OTP (One-Time-Password) that will be sent to confirm that they own the Email address and that the email is correct.
+\item User shall be able to assign a password that will agree with password requirements.
+\item Passwords must use at least three of the four available character types: lowercase letters, uppercase letters, numbers, and symbols.
+\item System will check for any University number duplication upon sign up, if the system finds any, user shall be notified with a warning message.
+\item User shall be able to sign in with their University number and the password they've set previously.
+\item User Shall be able to select the App’s theme after confirming their identity, the options will be “light-mode” and “dark-mode”.
+\item User shall be able to comment on each post with a different name, unless it’s in their own posts, it will always be “Poster”, that will also show when they comment.
+\item User that comment on a post will be given a name that reflects when they commented on the post (if they are the first to comment, their number will be @, second to comment will be @ Etc.)
+\item User shall be able to report Posts by pressing the ellipsis button (three dots) on the post and selecting report. An interface will be shown, asking the user to select the reason for the report, and allowing the user to write his own personal reasoning and comments. The same procedure occurs with reporting comments.
+\item User shall be notified with a “Pop-up” of activities related to their posts and comments.
+\item User shall be able to Up-vote and Down-vote posts and comments by pressing Either the Up-vote button (arrow head pointing to the top) or Down-vote button (arrow head pointing to the bottom)
+\item System shall only allow posts to last up to hours, user will have the option to select between and hours regarding his post availability.
+\item User shall have an interface where they can see recent activities on their posts and comments that are still available.
+\item User's time-line shall be shown depending on the Major and academy they choose.
+\item User shall be shown \# of posts, comments, upvotes, his most interacted post and recently available ones in the Account Interface.
+\item An Admin will be assigned for human involvement if needed, giving them permission to delete others posts and comments.
+\end{enumerate}
+
+\bibliographystyle{plain}
+\bibliography{Citation}
+\end{document}

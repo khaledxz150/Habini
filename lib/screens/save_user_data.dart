@@ -10,7 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 final _auth = FirebaseAuth.instance;
 
-User logedInUser;
+User logedIn;
 var uid;
 String exists = '';
 
@@ -19,8 +19,8 @@ final _firebase = FirebaseFirestore.instance;
 void storeUserData() async {
   try {
     _firebase.collection('Users').doc(uid).set({
-      'phoneNumber': logedInUser.phoneNumber,
-      'UID': logedInUser.uid,
+      'phoneNumber': logedIn.phoneNumber,
+      'UID': logedIn.uid,
     });
   } catch (e) {
     print(e);
@@ -31,8 +31,8 @@ void getCurrentUser() {
   try {
     final user = _auth.currentUser;
     if (user != null) {
-      logedInUser = user;
-      uid = logedInUser.uid;
+      logedIn = user;
+      uid = logedIn.uid;
     }
   } catch (e) {
     print(e);

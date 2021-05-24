@@ -12,6 +12,7 @@ class PostStreamer extends StatelessWidget {
   });
   final User logedInUser;
 
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -27,7 +28,16 @@ class PostStreamer extends StatelessWidget {
               final votes = postData['votesNumber'];
               final date = postData['sentOn'];
               final postId = postData['postId'];
+              final poster = postData['poster'];
+
+              final currentUser = logedInUser.uid;
+              bool meIs = false;
+              if (currentUser == poster) {
+                meIs = true;
+              }
+
               final kPost = KPostContainer(
+                isMe : meIs  ,
                 content: content,
                 numberOfComments: numberOfComments,
                 votes: votes,

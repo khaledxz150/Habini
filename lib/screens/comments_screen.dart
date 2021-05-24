@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:habini/screens/add_post_screen.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'save_user_data.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
@@ -23,7 +24,9 @@ class CommentsScreen extends StatefulWidget {
   final postVotes;
   final postId;
   final date;
+  String poster ;
   CommentsScreen({
+    this.poster,
     this.date,
     this.postId,
     this.postContent,
@@ -111,6 +114,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       body: ListView(
         children: <Widget>[
           CurrentPost(
+            poster : widget.poster,
             date: widget.date,
             content: widget.postContent.toString(),
             numberOfComments: widget.numberOfComments,
@@ -240,6 +244,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
 }
 
 class CurrentPost extends StatefulWidget {
+  String poster  ;
   final String content;
   int votes = 0;
   final date;
@@ -248,6 +253,7 @@ class CurrentPost extends StatefulWidget {
   int upCounter = 0;
 
   CurrentPost({
+    this.poster,
     this.content,
     this.votes,
     this.date,
@@ -289,6 +295,13 @@ class _CurrentPostState extends State<CurrentPost> {
                 padding: const EdgeInsets.only(top: 5.0, left: 5.0),
                 child: CircleAvatar(
                   backgroundColor: UniformColor,
+                  child:Text(
+                    widget.poster,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
                 ),
               ),
               Row(

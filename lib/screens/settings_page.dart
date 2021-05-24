@@ -38,13 +38,13 @@ class _SettingScreenState extends State<SettingScreen> {
           SettingsSection(
             tiles: [
               SettingsTile(
-                title: 'Change Profile avatar',
+                title: 'Profile ',
                 leading: Icon(Icons.account_circle),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile(
-                title: 'Change Password',
-                leading: Icon(Icons.lock),
+                title: 'Change phone number',
+                leading: Icon(Icons.phone),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile(

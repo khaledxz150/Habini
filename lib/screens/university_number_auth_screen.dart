@@ -8,6 +8,12 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:habini/screens/welcome_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+final _auth = FirebaseAuth.instance;
+final _firebase = FirebaseFirestore.instance;
+
+final textController = TextEditingController();
 
 class UniversityAuth extends StatefulWidget {
   @override
@@ -16,6 +22,9 @@ class UniversityAuth extends StatefulWidget {
 
 class _State extends State<UniversityAuth> {
   bool showSinner = false;
+  String studentId = null;
+  bool isExists;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -75,7 +84,11 @@ class _State extends State<UniversityAuth> {
                             keyBordType: null,
                             hidden: false,
                             inputFormatters: null,
-                            onChange: (value) {},
+                            onChange: (value) {
+                              setState(() {
+                                studentId = value;
+                              });
+                            },
                           ),
                         ),
                         SizedBox(
@@ -83,8 +96,71 @@ class _State extends State<UniversityAuth> {
                         ),
                         KmaterialButton(
                           label: 'Check',
-                          onPressed: () {
-                            Navigator.pushNamed(context, 'sign_up_screen');
+                          onPressed: () async {
+                            if (studentId == null) {
+                              Alert(
+                                context: context,
+                                type: AlertType.info,
+                                title: "Please enter your university ID",
+                                desc: "",
+                                buttons: [
+                                  DialogButton(
+                                    child: Text(
+                                      "Back",
+                                      style: TextStyle(color: Colors.white, fontSize: 20),
+                                    ),
+                                    onPressed: () => Navigator.pop(context),
+                                    width: 120,
+                                  ),
+                                ],
+                              ).show();
+                            } else {
+                              try{
+                                var doc = await _firebase
+                                    .collection("university_ids")
+                                    .doc(studentId)
+                                    .get();
+
+                                if (doc.exists)
+                                  Navigator.pushNamed(context, 'sign_up_screen');
+                                else{
+                                  Alert(
+                                    context: context,
+                                    type: AlertType.error,
+                                    title: "Your university ID is not exist",
+                                    desc: "Try check if your university ID is correct ",
+                                    buttons: [
+                                      DialogButton(
+                                        child: Text(
+                                          "Back",
+                                          style: TextStyle(color: Colors.white, fontSize: 20),
+                                        ),
+                                        onPressed: () => Navigator.pop(context),
+                                        width: 120,
+                                      ),
+                                    ],
+                                  ).show();
+                                }
+                              }catch(e){
+                                Alert(
+                                  context: context,
+                                  type: AlertType.error,
+                                  title: "$e",
+                                  desc: "",
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "Back",
+                                        style: TextStyle(color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                      width: 120,
+                                    ),
+                                  ],
+                                ).show();
+                              }
+
+                            }
                           },
                           color: UniformColor,
                         ),

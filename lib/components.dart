@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habini/screens/save_user_data.dart';
 import 'package:intl/intl.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
@@ -181,13 +182,13 @@ class _KPostContainerState extends State<KPostContainer> {
                   ),
                 ),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         timeAgo(widget.date.toDate()),
                       ),
-                      DropdownButton<FlatButton>()
-                    ]),
+                      
+                    ])
               ],
             ),
             SizedBox(
@@ -305,7 +306,7 @@ class _KPostContainerState extends State<KPostContainer> {
                                   postVotes: widget.votes,
                                   numberOfComments: widget.numberOfComments,
                                   date: widget.date,
-                                  poster : 'Owner' ,
+                                  poster: 'Owner',
                                 ),
                               ),
                             );
@@ -356,7 +357,49 @@ class _KPostContainerState extends State<KPostContainer> {
                       Text(
                         timeAgo(widget.date.toDate()),
                       ),
-                      DropdownButton<FlatButton>()
+                      FlatButton(
+                        minWidth: 20,
+                        onPressed: () {
+                          Alert(
+                            context: context,
+                            title: "Report",
+                            content: Column(
+                              children: <Widget>[
+                                TextField(
+                                    decoration: InputDecoration(
+                                      icon: Icon(
+                                        Icons.warning,
+                                        color: UniformColor,
+                                      ),
+                                      labelText: 'Describe the problem',
+                                      labelStyle: TextStyle(
+                                        color: UniformColor,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: UniformColor, width: 1.0),
+                                      ),
+                                    ))
+                              ],
+                            ),
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "Submit",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () {},
+                                width: 120,
+                                color: UniformColor,
+                              )
+                            ],
+                          ).show();
+                        },
+                        child: Icon(
+                          Icons.warning,
+                        ),
+                      ),
                     ]),
               ],
             ),
@@ -475,7 +518,7 @@ class _KPostContainerState extends State<KPostContainer> {
                                   postVotes: widget.votes,
                                   numberOfComments: widget.numberOfComments,
                                   date: widget.date,
-                                  poster : '' ,
+                                  poster: '',
                                 ),
                               ),
                             );

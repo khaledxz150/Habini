@@ -11,6 +11,11 @@
 \usepackage[T1]{fontenc}
 \usepackage{titling}
 \usepackage{geometry}
+\usepackage{array}
+\usepackage{wrapfig}
+\usepackage{multirow}
+\usepackage{tabularx}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \setlength{\droptitle}{-2em}
 \titleformat*{\section}{\LARGE\bfseries}
 
@@ -190,14 +195,12 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item System shall add posts, comment, delete, do other requests from 0.5 to 2 seconds maximum under heavy load.
 \item System shall be able to handle 10000 thousand request at a time..
 \end{enumerate}
-\sectionbreak
+\vspace{-5em}
 
 \section{Models and Diagrams}
 \subsection{USE CASE}
-\vspace{-6em}
 \begin{figure}[b]
-\centerline{\includegraphics[width=1.4\textwidth]{./USECASE/5abiniUseCase.png}}
-\vspace{-1em}
+\centerline{\includegraphics[width=1.3\textwidth]{./USECASE/5abiniUseCase.png}}
 \caption{USE CASE}
 \end{figure}
 \twocolumn
@@ -328,8 +331,35 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \subsection{Languages}
 \item Flutter
 \item Java.js
-
 \end{itemize}
+
+\section{Testing}
+\begin{table}[h!]
+ 
+\hskip-2.4cm\ \begin{tabular}{ |P{4cm}|P{5cm}|P{5cm}|P{4cm}| }
+ \hline
+ \multicolumn{4}{|c|}{Sign-up} \\ 
+ \hline
+\# number of inputs & Input	& OTP Status & Expected outcome\\
+ \hline
+1	&   University ID is correct, Phone number is correct& OTP is sent to confirm and entered correctly & successfully registered \\ \hline
+2	&   University ID is correct, Phone number is incorrect & \vspace{+0.0001em} OTP is not sent & \vspace{-1em}unsuccessful, user Notified with error	\\   \hline
+3	&   University ID is incorrect, Phone number is incorrect & \vspace{+0.0001em} OTP is not sent & unsuccessful, user Notified with error\\  \hline
+ \end{tabular}
+ \end{table}
+ \begin{table}[h!]
+
+\hskip-2.4cm\ \begin{tabular}{ |P{4.4cm}|P{7cm}|P{7cm}| }
+ \hline
+ \multicolumn{3}{|c|}{Posting} \\ 
+ \hline
+\# number of inputs & Input	& Expected outcome\\
+ \hline
+1	&   Content entered and is not empty & post created \\ \hline
+2	&   Content is not entered and is  empty & post not created, user notified \\ \hline
+ \end{tabular}
+ \end{table}
+ 
 \bibliographystyle{plain}
 \bibliography{Citation}
 \end{document}

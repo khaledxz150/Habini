@@ -16,15 +16,16 @@
 \contentsline {section}{\numberline {4}Requirements}{8}{section.4}%
 \contentsline {subsection}{\numberline {4.1}User requirements}{8}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}System Requirements}{8}{subsection.4.2}%
-\contentsline {section}{\numberline {5}Models and Diagrams}{11}{section.5}%
-\contentsline {subsection}{\numberline {5.1}USE CASE}{11}{subsection.5.1}%
-\contentsline {subsubsection}{\numberline {5.1.1}Use cases}{13}{subsubsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.2}ER Diagram}{14}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Sequence Diagrams}{15}{subsection.5.3}%
-\contentsline {subsubsection}{\numberline {5.3.1}Sign-up}{15}{subsubsection.5.3.1}%
-\contentsline {subsubsection}{\numberline {5.3.2}Post}{16}{subsubsection.5.3.2}%
-\contentsline {subsubsection}{\numberline {5.3.3}Class Diagram}{17}{subsubsection.5.3.3}%
-\contentsline {subsection}{\numberline {5.4}Software Architecture}{18}{subsection.5.4}%
-\contentsline {section}{\numberline {6}Software Implementation and Testing}{18}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Tools}{18}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Languages}{19}{subsection.6.2}%
+\contentsline {section}{\numberline {5}Models and Diagrams}{10}{section.5}%
+\contentsline {subsection}{\numberline {5.1}USE CASE}{10}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}Use cases}{12}{subsubsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.2}ER Diagram}{13}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Sequence Diagrams}{14}{subsection.5.3}%
+\contentsline {subsubsection}{\numberline {5.3.1}Sign-up}{14}{subsubsection.5.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.2}Post}{15}{subsubsection.5.3.2}%
+\contentsline {subsubsection}{\numberline {5.3.3}Class Diagram}{16}{subsubsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.4}Software Architecture}{17}{subsection.5.4}%
+\contentsline {section}{\numberline {6}Software Implementation and Testing}{17}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Tools}{17}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Languages}{18}{subsection.6.2}%
+\contentsline {section}{\numberline {7}Testing}{18}{section.7}%

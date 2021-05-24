@@ -81,7 +81,7 @@ class _SignInState extends State<SignIn> {
                             },
                           ),
                         ),
-                        Padding(
+                        /*Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: KTextField(
                             labelText: 'Password',
@@ -99,9 +99,9 @@ class _SignInState extends State<SignIn> {
                               password = value;
                             },
                           ),
-                        ),
+                        ),*/
                         SizedBox(
-                          height: 4,
+                          height: 10,
                         ),
                         KmaterialButton(
                           label: 'Log In',
@@ -137,7 +137,8 @@ class _SignInState extends State<SignIn> {
                           children: <Widget>[
                             FlatButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, 'sign_up_screen');
+                                Navigator.pushNamed(
+                                    context, 'university_number_auth_screen');
                               },
                               child: Text(
                                 'sign up ',
@@ -146,7 +147,7 @@ class _SignInState extends State<SignIn> {
                                 ),
                               ),
                             ),
-                            FlatButton(
+                            /*FlatButton(
                               onPressed: () {},
                               child: Text(
                                 'Recover password',
@@ -154,7 +155,7 @@ class _SignInState extends State<SignIn> {
                                   color: UniformColor,
                                 ),
                               ),
-                            ),
+                            ),*/
                           ],
                         ),
                       ],

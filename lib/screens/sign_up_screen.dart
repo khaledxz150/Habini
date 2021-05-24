@@ -101,7 +101,10 @@ class _State extends State<SignUp> {
                           showCountryCodes: true,
                         ),
                       ),
-                      Padding(
+                      SizedBox(
+                        height: 10,
+                      ),
+                      /*  Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: KTextField(
                           cursorColor: Colors.black,
@@ -136,7 +139,7 @@ class _State extends State<SignUp> {
                           inputFormatters: null,
                           onChange: (value) {},
                         ),
-                      ),
+                      ), */
                       SizedBox(
                         height: 10,
                       ),

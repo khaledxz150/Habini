@@ -79,7 +79,7 @@ class _State extends State<UniversityAuth> {
                           ),
                         ),
                         SizedBox(
-                          height: 4,
+                          height: 10,
                         ),
                         KmaterialButton(
                           label: 'Check',
@@ -93,7 +93,7 @@ class _State extends State<UniversityAuth> {
                             FlatButton(
                               onPressed: () {
                                 Navigator.of(context).pushNamedAndRemoveUntil(
-                                    'welcome_screen',
+                                    'sign_in_screen',
                                     (Route<dynamic> route) => false);
                               },
                               child: Text(

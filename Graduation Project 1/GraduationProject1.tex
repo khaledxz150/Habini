@@ -59,14 +59,19 @@
 It is hereby certified that the project titled <5abini>, Khaled Abulawi {1531904}, Ahmad Alsoub {1837661}, AL-Motasem Alamleh {1834683}, in partial fulfillment of the award of the Degree of Bachelor 
 <Software Engineering> embodies original work done by them under my supervision\\ 
 Project Supervisor: Aladdin Hussein Baarah \\ Department of Software Engineering.
-\section*{Abstract}
-As people who lived a big major of their lives using Social media apps, and us being aware that newer generations will do the same, we, throughout our experiences, came to appreciate things we didn't consider in our earlier days, Privacy. \\
-Nowdays, almost all social media apps focus on public interactions and people knowing who you are, we've seen success in this  trend of course, but we've also seen withdraw in actual human interactions or confrontation, because everyone knows who you are.\\  While discussing this subject, we came with the idea of an app that focuses on privacy, not because it hides your information, because it doesn't have it (the not so major ones at least). That's how 5abini was born.
+
+\sectionbreak
 \section*{Acknowledgment}
-This project has given us an idea how companies may work and organize themselves. We had many hardships and challenges we had to go through, but the progress we made in a new language and workflow we never experienced made us proud. It's an experience we'll never forget.\\
-We would like to thank Dr. Alaa Ba'arah for his guidance and gearing our ideas in a better direction. Sharing some of his wisdom with us proved nothing but beneficial for us.\\
+This project has given us an idea how companies may work and organize themselves. We had many hardships and challenges we had to go through, but the progress we made in a new language and workflow we never experienced made us proud. It's an experience we'll never forget.\\ \\ 
+We would like to thank Dr. Alaa Ba'arah for his guidance and gearing our ideas in a better direction. Sharing some of his wisdom with us proved nothing but beneficial for us.\\ \\
 We would also like to thank Dr. Bashar Al-Shboul and Dr.KHalid Al-Sarayreh for their assistance we needed them.\\
 We wouldn't have made this app without your assistance, thank you all a lot for the support.
+\sectionbreak
+\section*{Abstract}
+As people who lived a big major of their lives using Social media apps, and us being aware that newer generations will do the same, we, throughout our experiences, came to appreciate things we didn't consider in our earlier days, Privacy. \\
+Nowdays, almost all social media apps focus on public interactions and people knowing who you are, we've seen success in this  trend of course, but we've also seen withdraw in actual human interactions or confrontation, because everyone knows who you are.\\  While discussing this subject, we came with the idea of an app that focuses on privacy, not because it hides your information, because it doesn't have it (the not so major ones at least). That's how 5abini was born.\sectionbreak
+\
+
 
 \tableofcontents
 \sectionbreak
@@ -100,7 +105,6 @@ Most social media platform are geared toward talking to people you already, or a
 
 
 
-\
 \section{literature review}
 \subsection{Existing programs}
 \subsubsection{Reddit}
@@ -186,11 +190,130 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item System shall add posts, comment, delete, do other requests from 0.5 to 2 seconds maximum under heavy load.
 \item System shall be able to handle 10000 thousand request at a time..
 \end{enumerate}
-\section{MODELS}
+\sectionbreak
+
+\section{Models and Diagrams}
 \subsection{USE CASE}
-\centerline{\includegraphics[width=1.48\textwidth]{./USECASE/5abiniUseCase.png}}
+\vspace{-6em}
+\begin{figure}[b]
+\centerline{\includegraphics[width=1.4\textwidth]{./USECASE/5abiniUseCase.png}}
+\vspace{-1em}
+\caption{USE CASE}
+\end{figure}
+\twocolumn
+\subsubsection{Use cases}
+\subsubsection*{Log in}
+\begin{enumerate}
+\itemsep0em
+\item Enter Phone number
+\item Enter OTP
+\item Click "Log in"
+\end{enumerate}
+\subsubsection*{Sign up}
+\begin{enumerate}
+\itemsep0em 
+\item Enter University ID
+\item Enter Phone number
+\item Enter OTP
+\item Click "Sign in"
 
+\end{enumerate}
+\subsubsection*{Post}
+\begin{enumerate}
+\itemsep0em 
+\item Enter content
+\item Set duration
+\end{enumerate} 
+\subsubsection*{Comment}
+\begin{enumerate}
+\itemsep0em 
+\item Choose post
+\item Press comment Icon
+\item Enter content
+\end{enumerate} 
+\subsubsection*{Report}
+\begin{enumerate}
+\itemsep0em 
+\item Click arrow to open list on post
+\item Add report content
+\item Click "Report"
+\end{enumerate} 
+\subsubsection*{Upvote-Downvote}
+\begin{enumerate}
+\itemsep0em 
+\item Choose post
+\item click Arrow-up to upvote, Arrow-down to downvote
+\end{enumerate} 
+\subsubsection*{Check Profile}
+\begin{enumerate}
+\itemsep0em 
+\item Click on "Settings"
+\item Click "Profile"
+\end{enumerate} 
+\subsubsection*{Delete account}
+\begin{enumerate}
+\itemsep0em 
+\item Click on "Settings"
+\item Click "Delete account"
+\item Confirm Identity with OTP
+\item Confirm delete
+\end{enumerate} 
+\subsubsection*{Change phone Number}
+\begin{enumerate}
+\itemsep0em 
+\item Click on "Settings"
+\item Click "Change phone"
+\item Confirm Identity with OTP on old number
+\item Enter new phone
+\item Confirm Identity with OTP on new number
+\end{enumerate}
+\subsubsection*{Change location}
+\begin{enumerate}
+\itemsep0em 
+\item Click on "Settings"
+\item Click "Location"
+\item Choose "A Facility
+\item Click "Change"
+\end{enumerate}
+\subsubsection*{Sign out}
+\begin{enumerate}
+\itemsep0em 
+\item Click on "Settings"
+\item Click on "Sign out"
+\end{enumerate}
+\onecolumn
+\sectionbreak
+ \subsection{ER Diagram}
+\begin{figure}[h!]
+\centerline{\includegraphics[width=0.95\textwidth]{./ERDiagram/ERDiagram.JPG}}
+  \caption{ER Diagram}
+\end{figure}
 
+\vspace{-1em}
+\subsection{Sequence Diagrams}
+\subsubsection{Sign-up}
+\begin{figure}[h!]
+\centerline{\includegraphics[width=0.85\textwidth]{./SequenceDiagram/SequenceDiagram.JPG}}
+  \caption{Sign-up sequence}
+\end{figure}
+\clearpage
+\subsubsection{Post}
+\begin{figure}[h!]
+\centerline{\includegraphics[width=0.85\textwidth]{./SequenceDiagram/SequenceDiagram2.PNG}}
+  \caption{Sign-up sequence}
+\end{figure}
+
+\sectionbreak
+\vspace{+6em}
+\subsubsection{Class Diagram}
+\vspace{-1.4em}
+\begin{figure}[h!]
+\centerline{\includegraphics[width=1.1\textwidth]{./ClassDiagram/ClassDiagram.PNG}}
+  \caption{Class Diagrams}
+\end{figure}
+\clearpage
+\subsection{Software Architecture}
+\centerline{\includegraphics[width=1.1\textwidth]{./SoftwareArch/SoftwareArch.PNG}}
 
 
 \bibliographystyle{plain}

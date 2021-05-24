@@ -15,6 +15,11 @@
 \usepackage{wrapfig}
 \usepackage{multirow}
 \usepackage{tabularx}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{sectsty}
+\sectionfont{\color{BlueGreen}} 
+\subsubsectionfont{\color{BlueGreen}} 
+\subsectionfont{\color{BlueGreen}} 
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \setlength{\droptitle}{-2em}
 \titleformat*{\section}{\LARGE\bfseries}
@@ -195,17 +200,21 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item System shall add posts, comment, delete, do other requests from 0.5 to 2 seconds maximum under heavy load.
 \item System shall be able to handle 10000 thousand request at a time..
 \end{enumerate}
-\vspace{-5em}
-
+\sectionbreak
+\vspace{-12em}
 \section{Models and Diagrams}
 \subsection{USE CASE}
+\vspace{-40em}
 \begin{figure}[b]
-\centerline{\includegraphics[width=1.3\textwidth]{./USECASE/5abiniUseCase.png}}
+\vspace{-40em}
+\centerline{\includegraphics[width=1.4\textwidth]{./USECASE/5abiniUseCase.png}}
 \caption{USE CASE}
 \end{figure}
 \twocolumn
+\begin{Large}
 \subsubsection{Use cases}
-\subsubsection*{Log in}
+
+\end{Large}\subsubsection*{Log in}
 \begin{enumerate}
 \itemsep0em
 \item Enter Phone number
@@ -338,7 +347,7 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
  
 \hskip-2.4cm\ \begin{tabular}{ |P{4cm}|P{5cm}|P{5cm}|P{4cm}| }
  \hline
- \multicolumn{4}{|c|}{Sign-up} \\ 
+ \multicolumn{4}{|c|}{{\color{BlueGreen} Sign-Up}} \\ 
  \hline
 \# number of inputs & Input	& OTP Status & Expected outcome\\
  \hline
@@ -351,7 +360,7 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 
 \hskip-2.4cm\ \begin{tabular}{ |P{4.4cm}|P{7cm}|P{7cm}| }
  \hline
- \multicolumn{3}{|c|}{Posting} \\ 
+ \multicolumn{3}{|c|}{{\color{BlueGreen} Posting}} \\ 
  \hline
 \# number of inputs & Input	& Expected outcome\\
  \hline

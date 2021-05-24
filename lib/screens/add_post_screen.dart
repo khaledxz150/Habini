@@ -116,6 +116,7 @@ class _AddPostState extends State<AddPost> {
                       cursorColor: Colors.black,
                       inputFormatters: [
                         FilteringTextInputFormatter.deny(RegExp(r'[/\\]')),
+                        LengthLimitingTextInputFormatter(170),
                       ],
                       onChanged: (value) {
                         _postContent = value;

@@ -14,6 +14,7 @@ final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
 
 final textController = TextEditingController();
+bool showSinner = false;
 
 class UniversityAuth extends StatefulWidget {
   @override
@@ -21,7 +22,9 @@ class UniversityAuth extends StatefulWidget {
 }
 
 class _State extends State<UniversityAuth> {
-  bool showSinner = false;
+
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
+
   String studentId = null;
   bool isExists;
 
@@ -30,6 +33,7 @@ class _State extends State<UniversityAuth> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        key: _scaffoldkey,
         backgroundColor: UniformColor,
         body: ModalProgressHUD(
           inAsyncCall: showSinner,
@@ -98,24 +102,19 @@ class _State extends State<UniversityAuth> {
                         KmaterialButton(
                           label: 'Check',
                           onPressed: () async {
+                            setState(() {
+                              showSinner = true;
+                            });
                             if (studentId == null) {
-                              Alert(
-                                context: context,
-                                type: AlertType.info,
-                                title: "Please enter your university ID",
-                                desc: "",
-                                buttons: [
-                                  DialogButton(
-                                    child: Text(
-                                      "Back",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20),
-                                    ),
-                                    onPressed: () => Navigator.pop(context),
-                                    width: 120,
-                                  ),
-                                ],
-                              ).show();
+                              setState(() {
+                                showSinner = false;
+                              });
+                              FocusScope.of(context).unfocus();
+                              _scaffoldkey.currentState.showSnackBar(
+                                SnackBar(
+                                  content: Text('Please enter your university ID'),
+                                ),
+                              );
                             } else {
                               try {
                                 var doc = await _firebase
@@ -123,10 +122,17 @@ class _State extends State<UniversityAuth> {
                                     .doc(studentId)
                                     .get();
 
-                                if (doc.exists)
+                                if (doc.exists) {
                                   Navigator.pushNamed(
                                       context, 'sign_up_screen');
+                                  setState(() {
+                                    showSinner = false;
+                                  });
+                                }
                                 else {
+                                  setState(() {
+                                    showSinner = false;
+                                  });
                                   Alert(
                                     context: context,
                                     type: AlertType.error,
@@ -148,23 +154,16 @@ class _State extends State<UniversityAuth> {
                                   ).show();
                                 }
                               } catch (e) {
-                                Alert(
-                                  context: context,
-                                  type: AlertType.error,
-                                  title: "$e",
-                                  desc: "",
-                                  buttons: [
-                                    DialogButton(
-                                      child: Text(
-                                        "Back",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
-                                      onPressed: () => Navigator.pop(context),
-                                      width: 120,
-                                    ),
-                                  ],
-                                ).show();
+                                setState(() {
+                                  showSinner = false;
+                                });
+                                print (e);
+                                FocusScope.of(context).unfocus();
+                                _scaffoldkey.currentState.showSnackBar(
+                                  SnackBar(
+                                    content: Text('Please enter your university ID'),
+                                  ),
+                                );
                               }
                             }
                           },

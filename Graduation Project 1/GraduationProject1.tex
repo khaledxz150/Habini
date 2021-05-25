@@ -14,6 +14,7 @@
 \usepackage{array}
 \usepackage{wrapfig}
 \usepackage{multirow}
+\graphicspath{ {figures/} }
 \usepackage{tabularx}
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{sectsty}
@@ -66,11 +67,17 @@
 \sectionbreak
 \sectionbreak
 \section*{Certificate}
-It is hereby certified that the project titled <5abini>, Khaled Abulawi {1531904}, Ahmad Alsoub {1837661}, AL-Motasem Alamleh {1834683}, in partial fulfillment of the award of the Degree of Bachelor 
+It is hereby certified that the project titled <5abini>, submitted by:
+\begin{itemize}
+\item Khaled Abulawi {1531904}
+\item Ahmad Alsoub {1837661}
+\item AL-Motasem Alamleh {1834683} \\
+In partial fulfillment of the award of the Degree of Bachelor 
 <Software Engineering> embodies original work done by them under my supervision\\ 
-Project Supervisor: Aladdin Hussein Baarah \\ Department of Software Engineering.
+Project Supervisor:
+\item Aladdin Hussein Baarah \\ Department of Software Engineering.
+\end{itemize}
 
-\sectionbreak
 \section*{Acknowledgment}
 This project has given us an idea how companies may work and organize themselves. We had many hardships and challenges we had to go through, but the progress we made in a new language and workflow we never experienced made us proud. It's an experience we'll never forget.\\ \\ 
 We would like to thank Dr. Alaa Ba'arah for his guidance and gearing our ideas in a better direction. Sharing some of his wisdom with us proved nothing but beneficial for us.\\ \\
@@ -83,13 +90,9 @@ As people who lived a big major of their lives using Social media apps, and us b
 Nowdays, almost all social media apps focus on public interactions and people knowing who you are, we've seen success in this  trend of course, but we've also seen withdraw in actual human interactions or confrontation, because everyone knows who you are.\\  While discussing this subject, we came with the idea of an app that focuses on privacy, not because it hides your information, because it doesn't have it (the not so major ones at least). That's how 5abini was born.\sectionbreak
 \sectionbreak
 \sectionbreak\sectionbreak\sectionbreak\sectionbreak
-
 \tableofcontents
+\listoffigures
 \sectionbreak
-
-
-
-
 
 
 
@@ -202,12 +205,10 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item System shall be able to handle 10000 thousand request at a time..
 \end{enumerate}
 \sectionbreak
-\vspace{-7em}
+
+\begin{figure}[b]
 \section{Models and Diagrams}
 \subsection{USE CASE}
-\vspace{-20em}
-\begin{figure}[b]
-
 \centerline{\includegraphics[width=1.4\textwidth]{./USECASE/5abiniUseCase.png}}
 \caption{USE CASE}
 \end{figure}
@@ -322,6 +323,149 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \centerline{\includegraphics[width=1.1\textwidth]{./ClassDiagram/ClassDiagram.PNG}}
   \caption{Class Diagrams}
 \end{figure}
+\sectionbreak
+\clearpage
+\begin{figure}[b!]
+\vspace{-2cm}
+\section{Interfaces}
+\subsection*{Loading the app}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/20.PNG}}
+  \caption{Opening the app from the app page}
+\end{figure}
+\begin{figure}[h!]
+\vspace{-2cm}
+
+\subsection*{Home page}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/1.PNG}}
+  \caption{Option to Sign-Up and Log-in, we'll go for sign up}
+\end{figure}
+
+
+\begin{figure}[h!]
+\vspace{-2cm}
+\subsection*{University ID Authentication}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/2.PNG}}
+  \caption{empty section}
+\end{figure}
+
+
+\begin{figure}[h!]
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/3.PNG}}
+  \caption{Entering an non-existing number}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/4.PNG}}
+  \caption{Warning that it doesn't exist}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/5.PNG}}
+  \caption{entering a correct number will send us to the Phone page}
+\end{figure}
+
+
+\begin{figure}[h!]
+\vspace{-2cm}
+\subsection*{Phone Authentication}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/6.PNG}}
+  \caption{Adding a phone number, then receiving an OTP}
+\end{figure}
+
+
+\begin{figure}[h!]
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/7.PNG}}
+  \caption{enter phone, Click "Continue" to go to OTP}
+  \end{figure}
+
+
+\begin{figure}[h!]
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/8.PNG}}
+  \caption{OTP page}
+  \end{figure}
+  
+  
+\begin{figure}[h!]
+\vspace{-2cm}
+  \subsection*{Home page again}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/12.PNG}}
+  \caption{Homepage after the post, notice that you're the "Owner"}
+  \end{figure}
+
+\begin{figure}[h!]
+\vspace{-2cm}
+  \subsection*{Loading page}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/9.PNG}}
+  \caption{What you see while app is loading the homepage}
+  \end{figure}
+
+
+\begin{figure}[t!]
+\vspace{-2cm}
+  \subsection*{Home page}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/10.PNG}}
+  \caption{This is the time-line page, pressing on Add post in navigation will send us to that page}
+  \end{figure}
+
+\begin{figure}[t!]
+\vspace{-2cm}
+  \subsection*{add post}
+\centerline{\includegraphics[width=0.7\textwidth]{./Screenshots/11.PNG}}
+  \caption{Adding a post will require adding content and specifying a time}
+\end{figure}
+
+\begin{figure}[h!]
+
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/12.PNG}}
+  \caption{Successful Post}
+  \end{figure}
+  \begin{figure}[h!]
+\vspace{-2cm}
+  \subsection*{Home page again}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/13.PNG}}
+  \caption{Homepage after the post, notice that you're the "Owner", clicking on comment icon will send us to the comment/post page}
+  \end{figure}
+
+\begin{figure}[h!]
+\vspace{-2cm}
+  \subsection*{Post page/add review comments}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/14.PNG}}
+  \caption{Here you can see the post, comments and add comments on your own}
+  \end{figure}
+
+\begin{figure}[h!]
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/15.PNG}}
+  \caption{Adding a comment then pressing the button next to it will add a comment}
+  \end{figure}
+
+\begin{figure}[h!]
+\vspace{-2cm}
+  \subsection*{Notification tab}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/16.PNG}}
+  \caption{Here you will see the notification you'll receive as a pop-up}
+  \end{figure}
+  
+  \begin{figure}[h!]
+\vspace{-2cm}
+  \subsection*{Settings page}
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/17.PNG}}
+  \caption{Here will you see many options that the user may need, clicking on Sign-out will log you out of your account session}
+  \end{figure}
+  \begin{figure}[h!]
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/18.PNG}}
+  \caption{pressing Log-out}
+  \end{figure}  
+    \begin{figure}[h!]
+\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/1.PNG}}
+  \caption{after pressing log-out}
+  \end{figure}
+
+
+
 \clearpage
 \subsection{Software Architecture}
 \centerline{\includegraphics[width=1.1\textwidth]{./SoftwareArch/SoftwareArch.PNG}}
@@ -366,7 +510,6 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 2	&   Content is not entered and is  empty & post not created, user notified \\ \hline 
  \end{tabular}
  \end{table}
- 
 \bibliographystyle{plain}
 \bibliography{Citation}
 \end{document}

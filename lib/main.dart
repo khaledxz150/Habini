@@ -22,6 +22,7 @@ class habini extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: WelcomeScreen(),
       initialRoute: 'navigation_page',
       routes: {

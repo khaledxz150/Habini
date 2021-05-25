@@ -40,6 +40,7 @@ class _HomeIndexState extends State<HomeIndex> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: UniformColor,
@@ -67,7 +68,7 @@ class _HomeIndexState extends State<HomeIndex> {
           child: Column(
             children: <Widget>[
               PostStreamer(
-                logedInUser: logedInUser ,
+                logedInUser: logedInUser,
               ),
             ],
           ),

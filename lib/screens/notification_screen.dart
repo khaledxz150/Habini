@@ -26,7 +26,7 @@ class _NotificationsState extends State<Notifications> {
               width: 20.0,
             ),
             Text(
-              'Notifications (Demo)',
+              'Notifications ',
               style: GoogleFonts.koHo(
                 color: Colors.white,
                 fontSize: 25,

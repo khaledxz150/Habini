@@ -28,6 +28,7 @@ class _State extends State<UniversityAuth> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: UniformColor,
         body: ModalProgressHUD(
@@ -107,7 +108,8 @@ class _State extends State<UniversityAuth> {
                                   DialogButton(
                                     child: Text(
                                       "Back",
-                                      style: TextStyle(color: Colors.white, fontSize: 20),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
                                     ),
                                     onPressed: () => Navigator.pop(context),
                                     width: 120,
@@ -115,25 +117,29 @@ class _State extends State<UniversityAuth> {
                                 ],
                               ).show();
                             } else {
-                              try{
+                              try {
                                 var doc = await _firebase
                                     .collection("university_ids")
                                     .doc(studentId)
                                     .get();
 
                                 if (doc.exists)
-                                  Navigator.pushNamed(context, 'sign_up_screen');
-                                else{
+                                  Navigator.pushNamed(
+                                      context, 'sign_up_screen');
+                                else {
                                   Alert(
                                     context: context,
                                     type: AlertType.error,
                                     title: "Your university ID is not exist",
-                                    desc: "Try check if your university ID is correct ",
+                                    desc:
+                                        "Try check if your university ID is correct ",
                                     buttons: [
                                       DialogButton(
                                         child: Text(
                                           "Back",
-                                          style: TextStyle(color: Colors.white, fontSize: 20),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20),
                                         ),
                                         onPressed: () => Navigator.pop(context),
                                         width: 120,
@@ -141,7 +147,7 @@ class _State extends State<UniversityAuth> {
                                     ],
                                   ).show();
                                 }
-                              }catch(e){
+                              } catch (e) {
                                 Alert(
                                   context: context,
                                   type: AlertType.error,
@@ -151,7 +157,8 @@ class _State extends State<UniversityAuth> {
                                     DialogButton(
                                       child: Text(
                                         "Back",
-                                        style: TextStyle(color: Colors.white, fontSize: 20),
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
                                       ),
                                       onPressed: () => Navigator.pop(context),
                                       width: 120,
@@ -159,7 +166,6 @@ class _State extends State<UniversityAuth> {
                                   ],
                                 ).show();
                               }
-
                             }
                           },
                           color: UniformColor,

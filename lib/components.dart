@@ -6,11 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:habini/screens/save_user_data.dart';
 import 'package:intl/intl.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:habini/screens/navigation_page.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
 
-// User logedInUser;
+User logedInUser;
 Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 
 class KTextField extends StatelessWidget {
@@ -135,6 +136,33 @@ class _KPostContainerState extends State<KPostContainer> {
   @override
   bool downVote = false;
   bool upVote = false;
+  String reportContent = null;
+
+  bool showSpinner = false;
+  final _firebase = FirebaseFirestore.instance;
+  User logedInUser;
+
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
+
+  final reportTextController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        logedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void updateVotesNumber() {
     setState(() {
@@ -182,12 +210,11 @@ class _KPostContainerState extends State<KPostContainer> {
                   ),
                 ),
                 Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         timeAgo(widget.date.toDate()),
                       ),
-                      
                     ])
               ],
             ),
@@ -326,6 +353,7 @@ class _KPostContainerState extends State<KPostContainer> {
       );
     } else {
       return Container(
+        key: _scaffoldkey,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
@@ -366,20 +394,27 @@ class _KPostContainerState extends State<KPostContainer> {
                             content: Column(
                               children: <Widget>[
                                 TextField(
-                                    decoration: InputDecoration(
-                                      icon: Icon(
-                                        Icons.warning,
-                                        color: UniformColor,
-                                      ),
-                                      labelText: 'Describe the problem',
-                                      labelStyle: TextStyle(
-                                        color: UniformColor,
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: UniformColor, width: 1.0),
-                                      ),
-                                    ))
+                                  decoration: InputDecoration(
+                                    icon: Icon(
+                                      Icons.warning,
+                                      color: UniformColor,
+                                    ),
+                                    labelText: 'Describe the problem',
+                                    labelStyle: TextStyle(
+                                      color: UniformColor,
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: UniformColor, width: 1.0),
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      reportContent = value;
+                                    });
+                                  },
+                                  controller: reportTextController,
+                                ),
                               ],
                             ),
                             buttons: [
@@ -389,7 +424,32 @@ class _KPostContainerState extends State<KPostContainer> {
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 20),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (reportContent == null) {
+                                    print("is null");
+                                  } else {
+                                    reportTextController.clear();
+                                    try {
+                                      _firebase
+                                          .collection('Reports')
+                                          .doc()
+                                          .set({
+                                        'Report': reportContent,
+                                        'Reporter': logedInUser.uid,
+                                        'sentOn': FieldValue.serverTimestamp(),
+                                        'PostId': widget.postId,
+                                      });
+
+                                      reportContent = null;
+
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                    setState(() {
+                                      showSpinner = false;
+                                    });
+                                  }
+                                },
                                 width: 120,
                                 color: UniformColor,
                               )

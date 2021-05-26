@@ -12,7 +12,7 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     final date = DateTime(2021, 5, 22, 20, 28);
     final date2 = DateTime.now();
-    final difference = date2.difference(date).inMinutes;
+    final difference = date2.difference(date).inDays;
     return Scaffold(
       backgroundColor: Color.fromRGBO(60, 174, 163, 0.1),
       appBar: AppBar(

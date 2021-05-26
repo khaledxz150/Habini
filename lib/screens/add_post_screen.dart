@@ -206,7 +206,7 @@ class _AddPostState extends State<AddPost> {
                       ],
                     ).show();
                   }
-                  if (_postContent == null) {
+                  if (_postContent == null || _postContent.trim() == "" ) {
                     setState(() {
                       showSpinner = false;
                     });

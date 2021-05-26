@@ -69,11 +69,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
   void getCommentsNumber() {
     countComments().then((value) {
       setState(() {
-        NumberOfComments = value;
         _firebase
             .collection('Posts')
             .doc(widget.postId)
             .update({'numOfComments': value});
+      });
+      setState(() {
+        NumberOfComments = value;
       });
     });
   }
@@ -163,7 +165,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                           ],
                         ).show();
                       }
-                      if (commentContent == null) {
+                      if (commentContent == null || commentContent.trim() == "") {
                       } else {
                         commentTextController.clear();
                         try {

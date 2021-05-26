@@ -14,7 +14,7 @@ final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
 
 final textController = TextEditingController();
-bool showSinner = false;
+bool showSpinner = false;
 
 class UniversityAuth extends StatefulWidget {
   @override
@@ -22,7 +22,6 @@ class UniversityAuth extends StatefulWidget {
 }
 
 class _State extends State<UniversityAuth> {
-
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
 
   String studentId = null;
@@ -36,7 +35,7 @@ class _State extends State<UniversityAuth> {
         key: _scaffoldkey,
         backgroundColor: UniformColor,
         body: ModalProgressHUD(
-          inAsyncCall: showSinner,
+          inAsyncCall: showSpinner,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -103,16 +102,17 @@ class _State extends State<UniversityAuth> {
                           label: 'Check',
                           onPressed: () async {
                             setState(() {
-                              showSinner = true;
+                              showSpinner = true;
                             });
                             if (studentId == null) {
                               setState(() {
-                                showSinner = false;
+                                showSpinner = false;
                               });
                               FocusScope.of(context).unfocus();
                               _scaffoldkey.currentState.showSnackBar(
                                 SnackBar(
-                                  content: Text('Please enter your university ID'),
+                                  content:
+                                      Text('Please enter your university ID'),
                                 ),
                               );
                             } else {
@@ -126,12 +126,11 @@ class _State extends State<UniversityAuth> {
                                   Navigator.pushNamed(
                                       context, 'sign_up_screen');
                                   setState(() {
-                                    showSinner = false;
+                                    showSpinner = false;
                                   });
-                                }
-                                else {
+                                } else {
                                   setState(() {
-                                    showSinner = false;
+                                    showSpinner = false;
                                   });
                                   Alert(
                                     context: context,
@@ -155,13 +154,14 @@ class _State extends State<UniversityAuth> {
                                 }
                               } catch (e) {
                                 setState(() {
-                                  showSinner = false;
+                                  showSpinner = false;
                                 });
-                                print (e);
+                                print(e);
                                 FocusScope.of(context).unfocus();
                                 _scaffoldkey.currentState.showSnackBar(
                                   SnackBar(
-                                    content: Text('Please enter your university ID'),
+                                    content:
+                                        Text('Please enter your university ID'),
                                   ),
                                 );
                               }

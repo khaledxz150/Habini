@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:habini/components.dart';
@@ -226,7 +228,7 @@ class _AddPostState extends State<AddPost> {
                       'phoneNumber': logedInUser.phoneNumber,
                       'postId': id,
                     });
-                    Alert(
+                    /*  Alert(
                       context: context,
                       type: AlertType.success,
                       title: "Successfully Posted",
@@ -241,9 +243,10 @@ class _AddPostState extends State<AddPost> {
                           width: 120,
                         ),
                       ],
-                    ).show();
+                    ).show(); */
                     //
-
+                    sleep(Duration(milliseconds: 500));
+                    Navigator.pushNamed(context, 'navigation_page');
                   } catch (ex) {
                     Alert(
                       context: context,

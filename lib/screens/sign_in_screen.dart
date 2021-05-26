@@ -142,7 +142,7 @@ class _SignInState extends State<SignIn> {
                                     context, 'university_number_auth_screen');
                               },
                               child: Text(
-                                'sign up ',
+                                'new student ? sign up',
                                 style: TextStyle(
                                   color: UniformColor,
                                 ),

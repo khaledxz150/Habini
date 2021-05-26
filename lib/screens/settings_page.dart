@@ -48,8 +48,8 @@ class _SettingScreenState extends State<SettingScreen> {
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile(
-                title: 'Change Location',
-                leading: Icon(Icons.add_location_alt),
+                title: 'Change faculty',
+                leading: Icon(Icons.apartment),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.switchTile(

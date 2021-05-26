@@ -136,7 +136,7 @@ class _State extends State<UniversityAuth> {
                                   Alert(
                                     context: context,
                                     type: AlertType.error,
-                                    title: "Your university ID is not exist",
+                                    title: "Your university ID does not exist",
                                     desc:
                                         "Try check if your university ID is correct ",
                                     buttons: [

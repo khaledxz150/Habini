@@ -157,7 +157,6 @@ class _KPostContainerState extends State<KPostContainer> {
   }
 
   getData() async {
-
       DocumentSnapshot votes = await _firebase
           .collection('Posts')
           .doc(widget.postId)
@@ -712,7 +711,7 @@ class _KPostContainerState extends State<KPostContainer> {
 
 class KComment extends StatefulWidget {
   final String content;
-  int votes = 0;
+  int votes= 0 ;
   Timestamp date;
   int downCounter = 0;
   int upCounter = 0;
@@ -763,7 +762,7 @@ class _KCommentState extends State<KComment> {
         .collection('Posts')
         .doc(widget.postId)
         .collection('Comments')
-        .doc(widget.commentId)
+        .doc(widget.commentId).collection('Voters').doc(logedInUser.uid)
         .get();
     setState(() {
       downVote = votes['downVote'];
@@ -894,7 +893,6 @@ class _KCommentState extends State<KComment> {
                 iconSize: 30,
                 onPressed: () {
                   setState(() {
-                    downVote = false;
                     if (upVote == true) {
                       widget.upCounter = 0;
                       widget.votes--;
@@ -903,6 +901,11 @@ class _KCommentState extends State<KComment> {
                       if (widget.downCounter == 1) {
                         widget.votes++;
                         widget.downCounter = 0;
+                      }
+                      if (downVote==true)
+                      {
+                        widget.votes++;
+                        downVote = false;
                       }
                       widget.upCounter = 1;
                       widget.votes++;
@@ -925,7 +928,6 @@ class _KCommentState extends State<KComment> {
                 iconSize: 30,
                 onPressed: () {
                   setState(() {
-                    upVote = false;
                     if (downVote == true) {
                       widget.downCounter = 0;
                       widget.votes++;
@@ -934,6 +936,11 @@ class _KCommentState extends State<KComment> {
                       if (widget.upCounter == 1) {
                         widget.votes--;
                         widget.upCounter = 0;
+                      }
+                      if (upVote==true)
+                      {
+                        widget.votes--;
+                        upVote = false;
                       }
                       widget.downCounter = 1;
                       widget.votes--;

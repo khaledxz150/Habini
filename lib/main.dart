@@ -20,11 +20,11 @@ void main() async {
 
 class habini extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WelcomeScreen(),
-      initialRoute: 'welcome_screen',
+      initialRoute: 'navigation_page',
       routes: {
         'save_user_data': (context) => SaveUserData(),
         'welcome_screen': (context) => WelcomeScreen(),

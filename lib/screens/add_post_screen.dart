@@ -245,25 +245,6 @@ class _AddPostState extends State<AddPost> {
                         'phoneNumber': logedInUser.phoneNumber,
                         'postId': id,
                       });
-                      /*  Alert(
-                        context: context,
-                        type: AlertType.success,
-                        title: "Successfully Posted",
-                        desc: "your post is now in the home screen",
-                        buttons: [
-                          DialogButton(
-                            child: Text(
-                              "Back",
-                              style: TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            onPressed: () => Navigator.pop(context),
-                            width: 120,
-                          ),
-                        ],
-                      ).show(); */
-                      //
-                      // sleep(Duration(milliseconds: 1000));
-                      Navigator.pushNamed(context, 'navigation_page');
                       setState(() {
                         showSpinner = false;
                       });
@@ -288,6 +269,9 @@ class _AddPostState extends State<AddPost> {
                       ).show();
                     }
                   }
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      'navigation_page',
+                          (Route<dynamic> route) => false);
                 },
                 minWidth: 100,
                 height: 42.0,

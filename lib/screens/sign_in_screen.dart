@@ -17,6 +17,7 @@ class _SignInState extends State<SignIn> {
   var email;
   var password;
   bool showSinner = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -108,16 +109,20 @@ class _SignInState extends State<SignIn> {
                           label: 'Log In',
                           onPressed: () async {
                             try {
-                              setState(() {
-                                showSinner = true;
-                              });
+                              setState(
+                                    () {
+                                  showSinner = true;
+                                },
+                              );
                               final loginUser =
-                                  await _auth.signInWithEmailAndPassword(
-                                      email: email, password: password);
+                              await _auth.signInWithEmailAndPassword(
+                                  email: email, password: password);
                               if (loginUser != null) {
-                                setState(() {
-                                  showSinner = false;
-                                });
+                                setState(
+                                      () {
+                                    showSinner = false;
+                                  },
+                                );
                                 Navigator.pushNamed(context, 'navigation_page');
                               }
                             } catch (e) {
@@ -126,9 +131,9 @@ class _SignInState extends State<SignIn> {
                               });
                               print(e);
                               Alert(
-                                      context: context,
-                                      title: "Warning",
-                                      desc: "$e")
+                                  context: context,
+                                  title: "Warning",
+                                  desc: "$e")
                                   .show();
                             }
                           },

@@ -79,7 +79,7 @@ String timeAgo(DateTime d) {
   if (diff.inHours > 0)
     return "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
   if (diff.inMinutes > 0)
-    return "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
+    return "${diff.inMinutes} ${diff.inMinutes == 1 ? "min" : "min"} ago";
   return "just now";
 }
 
@@ -137,6 +137,7 @@ class _KPostContainerState extends State<KPostContainer> {
   bool downVote = false;
   bool upVote = false;
   String reportContent = null;
+  bool isVoted;
 
   bool showSpinner = false;
   final _firebase = FirebaseFirestore.instance;
@@ -151,6 +152,34 @@ class _KPostContainerState extends State<KPostContainer> {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
+    getData();
+    checkIfLikedOrNot();
+  }
+
+  getData() async {
+
+      DocumentSnapshot votes = await _firebase
+          .collection('Posts')
+          .doc(widget.postId)
+          .collection('Voters')
+          .doc(logedInUser.uid)
+          .get();
+      setState(() {
+        downVote = votes['downVote'];
+        upVote = votes['upVote'];
+      });
+  }
+
+  checkIfLikedOrNot() async {
+    DocumentSnapshot ds = await _firebase
+        .collection("Posts")
+        .doc(widget.postId)
+        .collection('Voters')
+        .doc(logedInUser.uid)
+        .get();
+    setState(() {
+      isVoted = ds.exists;
+    });
   }
 
   void getCurrentUser() {
@@ -171,6 +200,67 @@ class _KPostContainerState extends State<KPostContainer> {
           .doc(widget.postId)
           .update({'votesNumber': widget.votes});
     });
+  }
+
+  void saveVoter() {
+    if (logedInUser == null) {
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "Login Alert",
+        desc: "Please Login First",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "close",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            width: 120,
+          )
+        ],
+      ).show();
+    } else {
+      try {
+        _firebase
+            .collection('Posts')
+            .doc(widget.postId)
+            .collection('Voters')
+            .doc(logedInUser.uid)
+            .set({
+          'downVote': downVote,
+          'upVote': upVote,
+          'sentOn': FieldValue.serverTimestamp(),
+        });
+      } catch (ex) {
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: "Connection error",
+          desc: "Please check your internet connection",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Back",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            ),
+          ],
+        ).show();
+      }
+    }
+    if (upVote == false && downVote == false) {
+      _firebase
+          .collection('Posts')
+          .doc(widget.postId)
+          .collection('Voters')
+          .doc(logedInUser.uid)
+          .delete();
+    }
   }
 
   @override
@@ -262,7 +352,6 @@ class _KPostContainerState extends State<KPostContainer> {
                             iconSize: 30,
                             onPressed: () {
                               setState(() {
-                                downVote = false;
                                 if (upVote == true) {
                                   widget.upCounter = 0;
                                   widget.votes--;
@@ -272,12 +361,18 @@ class _KPostContainerState extends State<KPostContainer> {
                                     widget.votes++;
                                     widget.downCounter = 0;
                                   }
+                                  if (downVote==true)
+                                  {
+                                    widget.votes++;
+                                    downVote = false;
+                                  }
                                   widget.upCounter = 1;
                                   widget.votes++;
                                   upVote = true;
                                 }
                                 updateVotesNumber();
                               });
+                              saveVoter();
                             },
                           ),
                           IconButton(
@@ -289,7 +384,6 @@ class _KPostContainerState extends State<KPostContainer> {
                             iconSize: 30,
                             onPressed: () {
                               setState(() {
-                                upVote = false;
                                 if (downVote == true) {
                                   widget.downCounter = 0;
                                   widget.votes++;
@@ -299,12 +393,18 @@ class _KPostContainerState extends State<KPostContainer> {
                                     widget.votes--;
                                     widget.upCounter = 0;
                                   }
+                                  if (upVote==true)
+                                    {
+                                      widget.votes--;
+                                      upVote = false;
+                                    }
                                   widget.downCounter = 1;
                                   widget.votes--;
                                   downVote = true;
                                 }
                                 updateVotesNumber();
                               });
+                              saveVoter();
                             },
                           ),
                         ],
@@ -441,7 +541,6 @@ class _KPostContainerState extends State<KPostContainer> {
                                       });
 
                                       reportContent = null;
-
                                     } catch (e) {
                                       print(e);
                                     }
@@ -507,7 +606,7 @@ class _KPostContainerState extends State<KPostContainer> {
                             iconSize: 30,
                             onPressed: () {
                               setState(() {
-                                downVote = false;
+
                                 if (upVote == true) {
                                   widget.upCounter = 0;
                                   widget.votes--;
@@ -517,12 +616,18 @@ class _KPostContainerState extends State<KPostContainer> {
                                     widget.votes++;
                                     widget.downCounter = 0;
                                   }
+                                  if (downVote==true)
+                                  {
+                                    widget.votes++;
+                                    downVote = false;
+                                  }
                                   widget.upCounter = 1;
                                   widget.votes++;
                                   upVote = true;
                                 }
                                 updateVotesNumber();
                               });
+                              saveVoter();
                             },
                           ),
                           IconButton(
@@ -534,7 +639,6 @@ class _KPostContainerState extends State<KPostContainer> {
                             iconSize: 30,
                             onPressed: () {
                               setState(() {
-                                upVote = false;
                                 if (downVote == true) {
                                   widget.downCounter = 0;
                                   widget.votes++;
@@ -544,12 +648,18 @@ class _KPostContainerState extends State<KPostContainer> {
                                     widget.votes--;
                                     widget.upCounter = 0;
                                   }
+                                  if (upVote==true)
+                                  {
+                                    widget.votes--;
+                                    upVote = false;
+                                  }
                                   widget.downCounter = 1;
                                   widget.votes--;
                                   downVote = true;
                                 }
                                 updateVotesNumber();
                               });
+                              saveVoter();
                             },
                           ),
                         ],
@@ -606,8 +716,13 @@ class KComment extends StatefulWidget {
   Timestamp date;
   int downCounter = 0;
   int upCounter = 0;
+  int numberOfComments = 0;
+  final postId;
+  final commentId;
 
   KComment({
+    this.commentId,
+    this.postId,
     this.votes,
     this.date,
     this.content,
@@ -621,6 +736,100 @@ class _KCommentState extends State<KComment> {
   @override
   bool downVote = false;
   bool upVote = false;
+  bool isVoted;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentUser();
+    getData();
+    checkIfLikedOrNot();
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        logedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  getData() async {
+    DocumentSnapshot votes = await _firebase
+        .collection('Posts')
+        .doc(widget.postId)
+        .collection('Comments')
+        .doc(widget.commentId)
+        .get();
+    setState(() {
+      downVote = votes['downVote'];
+      upVote = votes['upVote'];
+    });
+  }
+
+  checkIfLikedOrNot() async {
+    DocumentSnapshot ds = await _firebase
+        .collection("Posts")
+        .doc(widget.postId)
+        .collection('Voters')
+        .doc(logedInUser.uid)
+        .get();
+    setState(() {
+      isVoted = ds.exists;
+    });
+  }
+  void saveVoter() {
+      try {
+        _firebase
+            .collection('Posts')
+            .doc(widget.postId)
+            .collection('Comments')
+            .doc(widget.commentId).collection('Voters').doc(logedInUser.uid)
+            .set({
+          'downVote': downVote,
+          'upVote': upVote,
+          'sentOn': FieldValue.serverTimestamp(),
+        });
+      } catch (ex) {
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: "Connection error",
+          desc: "Please check your internet connection",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Back",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            ),
+          ],
+        ).show();
+      }
+
+    if (upVote == false && downVote == false) {
+      _firebase
+          .collection('Posts')
+          .doc(widget.postId)
+          .collection('Comments')
+          .doc(widget.commentId).collection('Voters').doc(logedInUser.uid)
+          .delete();
+    }
+  }
+  void updateVotesNumber() {
+    setState(() {
+      _firebase
+          .collection('Posts')
+          .doc(widget.postId).collection('Comments').doc(widget.commentId)
+          .update({'votesNumber': widget.votes});
+    });
+  }
 
   Widget build(BuildContext context) {
     return Container(
@@ -699,7 +908,9 @@ class _KCommentState extends State<KComment> {
                       widget.votes++;
                       upVote = true;
                     }
+                    updateVotesNumber();
                   });
+                  saveVoter();
                 },
               ),
               Text(
@@ -728,7 +939,9 @@ class _KCommentState extends State<KComment> {
                       widget.votes--;
                       downVote = true;
                     }
+                    updateVotesNumber();
                   });
+                  saveVoter();
                 },
               ),
             ],

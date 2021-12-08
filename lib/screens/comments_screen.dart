@@ -168,17 +168,21 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       if (commentContent == null || commentContent.trim() == "") {
                       } else {
                         commentTextController.clear();
+
+                        String id = _firebase.collection('Posts').doc(widget.postId).collection('Comments').doc().id;
                         try {
                           _firebase
                               .collection('Posts')
                               .doc(widget.postId)
                               .collection('Comments')
-                              .doc()
+                              .doc(id)
                               .set({
                             'content': commentContent.toString(),
                             'commenter': logedInUser.uid,
                             'sentOn': FieldValue.serverTimestamp(),
                             'votesNumber': commentVotes,
+                            'commentId':id,
+                            'postId':widget.postId,
                           });
                           commentContent = null;
                         } catch (ex) {
@@ -306,16 +310,11 @@ class _CurrentPostState extends State<CurrentPost> {
                   ),
                 ),
               ),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text(timeAgo(widget.date.toDate())),
-                    DropdownButton<FlatButton>()
-                  ]),
+              Text(timeAgo(widget.date.toDate())),
             ],
           ),
           SizedBox(
-            height: 15,
+            height: 9,
           ),
           Opacity(
             opacity: 0.5,
@@ -337,95 +336,16 @@ class _CurrentPostState extends State<CurrentPost> {
               alignment: Alignment.centerLeft,
               child: Text(
                 widget.content,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20
+                ),
               ),
             ),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_drop_up,
-                            color: upVote ? UniformColor : Colors.black,
-                          ),
-                          tooltip: 'Up vote',
-                          iconSize: 30,
-                          onPressed: () {
-                            setState(() {
-                              downVote = false;
-                              if (upVote == true) {
-                                widget.upCounter = 0;
-                                widget.votes--;
-                                upVote = false;
-                              } else {
-                                if (widget.downCounter == 1) {
-                                  widget.votes++;
-                                  widget.downCounter = 0;
-                                }
-                                widget.upCounter = 1;
-                                widget.votes++;
-                                upVote = true;
-                              }
-                            });
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_drop_down,
-                            color: downVote ? UniformColor : Colors.black,
-                          ),
-                          tooltip: 'Down vote',
-                          iconSize: 30,
-                          onPressed: () {
-                            setState(() {
-                              upVote = false;
-                              if (downVote == true) {
-                                widget.downCounter = 0;
-                                widget.votes++;
-                                downVote = false;
-                              } else {
-                                if (widget.upCounter == 1) {
-                                  widget.votes--;
-                                  widget.upCounter = 0;
-                                }
-                                widget.downCounter = 1;
-                                widget.votes--;
-                                downVote = true;
-                              }
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    Text(
-                      widget.votes.toString(),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 12.0, bottom: 3.0),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.comment),
-                      tooltip: 'Comment',
-                      iconSize: 28,
-                    ),
-                    Text(
-                      '$NumberOfComments',
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )
+          SizedBox(
+            height: 15,
+          ),
         ],
       ),
     );

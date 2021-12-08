@@ -23,6 +23,10 @@ class CommentsStreamer extends StatelessWidget {
             .orderBy('sentOn')
             .snapshots(),
         builder: (context, snapshot) {
+         if (snapshot.hasData==false)
+           {
+             return CircularProgressIndicator();
+           }
           if (snapshot.hasData) {
             final comments = snapshot.data.docs.reversed;
             List<KComment> commentsContainer = [];
@@ -31,26 +35,24 @@ class CommentsStreamer extends StatelessWidget {
               final content = commentData['content'];
               final votes = commentData['votesNumber'];
               final date = commentData['sentOn'];
+              final commentId=commentData['commentId'];
+              final postId = commentData['postID'];
 
               final kPost = KComment(
                 content: content,
                 votes: votes,
                 date: date,
+                commentId:commentId ,
+                postId:postId,
               );
               commentsContainer.add(kPost);
             }
-            return Expanded(
-              flex: 1,
-              child: Column(
-                children: commentsContainer,
-              ),
+
+            return Column(
+              children: commentsContainer,
             );
-          } else {}
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: UniformColor,
-            ),
-          );
+          }
+            return CircularProgressIndicator();
         });
   }
 }

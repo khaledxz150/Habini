@@ -40,7 +40,9 @@ class _SettingScreenState extends State<SettingScreen> {
               SettingsTile(
                 title: 'Profile ',
                 leading: Icon(Icons.account_circle),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) {
+                  Navigator.pushNamed(context, 'profile_page');
+                },
               ),
               SettingsTile(
                 title: 'Change phone number',

@@ -14,7 +14,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
 
-
+Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 User logedInUser;
 bool showSpinner = false;
 

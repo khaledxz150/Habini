@@ -7,7 +7,7 @@ import 'package:habini/screens/add_post_screen.dart';
 import 'package:habini/screens/notification_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../components.dart';
-
+Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 class MyBottomNavigationBar extends StatefulWidget {
   static const TextStyle optionStyle = TextStyle(
     fontSize: 30,

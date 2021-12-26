@@ -285,18 +285,25 @@ class _KPostContainerState extends State<KPostContainer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                  child: CircleAvatar(
-                    backgroundColor: UniformColor,
-                    child: Text(
-                      'Owner',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                      child: CircleAvatar(
+                        backgroundColor: UniformColor,
                       ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12,top: 6),
+                      child: Text(
+                        'Me',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

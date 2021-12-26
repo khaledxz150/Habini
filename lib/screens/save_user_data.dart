@@ -7,6 +7,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 
 final _auth = FirebaseAuth.instance;
 

@@ -8,6 +8,7 @@ import 'package:international_phone_input/international_phone_input.dart';
 import 'package:habini/screens/home_screen.dart';
 import 'package:habini/screens/otp_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 
 class SignUp extends StatefulWidget {
   @override

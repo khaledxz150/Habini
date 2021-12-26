@@ -13,7 +13,7 @@ import 'save_user_data.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
-
+Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 User logedInUser;
 
 int NumberOfComments = 0;
@@ -94,7 +94,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromRGBO(60, 174, 163, 0),
+      // backgroundColor: Color.fromRGBO(60, 174, 163, 0),
       appBar: AppBar(
         backgroundColor: UniformColor,
         title: Row(

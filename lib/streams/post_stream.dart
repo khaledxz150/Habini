@@ -10,13 +10,16 @@ class PostStreamer extends StatelessWidget {
   PostStreamer({
     this.logedInUser,
   });
-  final User logedInUser;
 
+  final User logedInUser;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: _firebase.collection('Posts').orderBy('sentOn').snapshots(),
+        stream: _firebase
+            .collection('Posts').orderBy('votesNumber')
+            .where('poster', isEqualTo: logedInUser.uid)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final posts = snapshot.data.docs.reversed;
@@ -37,7 +40,7 @@ class PostStreamer extends StatelessWidget {
               }
 
               final kPost = KPostContainer(
-                isMe : meIs  ,
+                isMe: meIs,
                 content: content,
                 numberOfComments: numberOfComments,
                 votes: votes,
@@ -52,7 +55,11 @@ class PostStreamer extends StatelessWidget {
                 children: postsContainer,
               ),
             );
-          } else {}
+          } else if (!snapshot.hasData){
+            return Center(
+              child: Text('No Data'),
+            );
+          }
           return Center(
             child: CircularProgressIndicator(
               backgroundColor: UniformColor,

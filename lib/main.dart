@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habini/screens/profile_screen.dart';
 
 import 'package:habini/screens/save_user_data.dart';
 import 'package:habini/screens/sign_up_screen.dart';
@@ -24,8 +25,9 @@ class habini extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WelcomeScreen(),
-      initialRoute: 'navigation_page',
+      initialRoute: 'welcome_screen',
       routes: {
+        'profile_page':(context)=> ProfilePage(),
         'save_user_data': (context) => SaveUserData(),
         'welcome_screen': (context) => WelcomeScreen(),
         'navigation_page': (context) => MyBottomNavigationBar(),

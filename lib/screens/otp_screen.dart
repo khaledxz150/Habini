@@ -10,6 +10,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habini/screens/navigation_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 
 class OTPScreen extends StatefulWidget {
   final String phone;

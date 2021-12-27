@@ -15,11 +15,11 @@ class PostStreamer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: _firebase
+    return FutureBuilder(
+        future: _firebase
             .collection('Posts').orderBy('votesNumber')
             .where('poster', isEqualTo: logedInUser.uid)
-            .snapshots(),
+            .get(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final posts = snapshot.data.docs.reversed;
@@ -46,6 +46,7 @@ class PostStreamer extends StatelessWidget {
                 votes: votes,
                 date: date,
                 postId: postId,
+                poster: poster,
               );
               postsContainer.add(kPost);
             }
@@ -67,4 +68,5 @@ class PostStreamer extends StatelessWidget {
           );
         });
   }
+
 }

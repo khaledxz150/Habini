@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:habini/models/posts.dart';
 import 'package:habini/screens/comments_screen.dart';
+import 'package:habini/screens/home_screen.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 User logedInUser;
@@ -13,7 +14,7 @@ var postId;
 
 class KPostContainerV2 extends StatefulWidget {
   final DocumentSnapshot document;
-  final isMe ;
+  final isMe;
 
   KPostContainerV2({
     this.document,
@@ -25,11 +26,13 @@ class KPostContainerV2 extends StatefulWidget {
 }
 
 class _KPostContainerV2State extends State<KPostContainerV2> {
-  int downCounter = 0;
-  int upCounter = 0;
+  // int downCounter = 0;
+  // int upCounter = 0;
   bool downVote = false;
   bool upVote = false;
   int votes = 0;
+  String reportContent = null;
+  final reportTextController = TextEditingController();
 
   @override
   void initState() {
@@ -37,7 +40,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
     super.initState();
     getData();
     getCurrentUser();
-
+    getVotes();
   }
 
   getData() async {
@@ -50,6 +53,16 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
     setState(() {
       downVote = votes['downVote'];
       upVote = votes['upVote'];
+    });
+  }
+
+  getVotes() async {
+    DocumentSnapshot votesData = await _firebase
+        .collection('Posts')
+        .doc(widget.document['postId'])
+        .get();
+    setState(() {
+      votes = votesData['votesNumber'];
     });
   }
 
@@ -141,11 +154,28 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
           stream: _firebase.collection('Posts').doc(posts.postId).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return new Text("Loading");
+              return CircularProgressIndicator();
             }
             var userDocument = snapshot.data;
             return new Text(userDocument["votesNumber"].toString());
           });
+    }
+
+    getUserAvatar() {
+      return StreamBuilder(
+        stream: _firebase.collection('Users').doc(posts.poster).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+          var userDocument = snapshot.data;
+          return CircleAvatar(
+            backgroundImage: NetworkImage(
+              userDocument["avatarUrl"],
+            ),
+          );
+        },
+      );
     }
 
     getCommentsNumber() {
@@ -153,13 +183,14 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
           stream: _firebase.collection('Posts').doc(posts.postId).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return new Text("Loading");
+              return CircularProgressIndicator();
             }
             var userDocument = snapshot.data;
             return new Text(userDocument["numOfComments"].toString());
           });
     }
-    if (widget.isMe) {
+
+    if (logedInUser.uid == posts.poster) {
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -184,16 +215,13 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                      child: CircleAvatar(
-                        backgroundColor: UniformColor,
-                      ),
+                      child: getUserAvatar(),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 12,top: 6),
+                      padding: const EdgeInsets.only(left: 12, top: 6),
                       child: Text(
                         'Me',
                         style: TextStyle(
-
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Raleway',
@@ -203,12 +231,58 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                   ],
                 ),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        timeAgo(posts.date.toDate()),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      timeAgo(posts.date.toDate()),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Container(
+                        width: 40,
+                        child: DropdownButton(
+                          isExpanded: true,
+                          items: [
+                            'Delete',
+                          ].map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (_) {
+                            Alert(
+                              context: context,
+                              type: AlertType.warning,
+                              title: "Delete your post",
+                              desc:
+                              "are you sure you want to delete your post ?",
+                              buttons: [
+                                DialogButton(
+                                  child: Text(
+                                    "Yes",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                  onPressed: () {
+                                    _firebase
+                                        .collection('Posts')
+                                        .doc(posts.postId)
+                                        .delete();
+                                    setState(() {
+                                      HomeIndexState().getPosts();
+                                    });
+                                  },
+                                  color: Color.fromRGBO(0, 179, 134, 1.0),
+                                ),
+                              ],
+                            ).show();
+                          },
+                        ),
                       ),
-                    ])
+                    ),
+                  ],
+                )
               ],
             ),
             SizedBox(
@@ -219,7 +293,10 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 1,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 1,
                   height: 0.5,
                   color: Colors.black,
                 ),
@@ -255,17 +332,15 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                             iconSize: 30,
                             onPressed: () {
                               setState(() {
-                                downVote = false;
+                                //downVote = false;
                                 if (upVote == true) {
-                                  upCounter = 0;
                                   votes--;
                                   upVote = false;
                                 } else {
-                                  if (downCounter == 1) {
+                                  if (downVote == true) {
                                     votes++;
-                                    downCounter = 0;
+                                    downVote = false;
                                   }
-                                  upCounter = 1;
                                   votes++;
                                   upVote = true;
                                 }
@@ -284,17 +359,16 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                             iconSize: 30,
                             onPressed: () {
                               setState(() {
-                                upVote = false;
+                                //upVote = false;
                                 if (downVote == true) {
-                                  downCounter = 0;
                                   votes++;
                                   downVote = false;
                                 } else {
-                                  if (upCounter == 1) {
+                                  if (upVote == true) {
                                     votes--;
-                                    upCounter = 0;
+                                    upVote = false;
                                   }
-                                  downCounter = 1;
+                                  //downCounter = 1;
                                   votes--;
                                   downVote = true;
                                 }
@@ -321,14 +395,15 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                           setState(() {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => CommentsScreen(
-                                  postId: posts.postId,
-                                  postContent: posts.content,
-                                  postVotes: votes,
-                                  numberOfComments: posts.numberOfComments,
-                                  date: posts.date,
-                                  poster: 'Owner',
-                                ),
+                                builder: (context) =>
+                                    CommentsScreen(
+                                      postId: posts.postId,
+                                      postContent: posts.content,
+                                      postVotes: votes,
+                                      numberOfComments: posts.numberOfComments,
+                                      date: posts.date,
+                                      poster: posts.poster,
+                                    ),
                               ),
                             );
                           });
@@ -366,9 +441,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                  child: CircleAvatar(
-                    backgroundColor: UniformColor,
-                  ),
+                  child: getUserAvatar(),
                 ),
                 Row(
                   children: <Widget>[
@@ -376,6 +449,89 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                       child: Text(
                         timeAgo(
                           posts.date.toDate(),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Container(
+                        width: 40,
+                        child: DropdownButton(
+                          isExpanded: true,
+                          items: [
+                            'Report',
+                          ].map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (_) {
+                            Alert(
+                              context: context,
+                              title: "Report",
+                              content: Column(
+                                children: <Widget>[
+                                  TextField(
+                                    decoration: InputDecoration(
+                                      icon: Icon(
+                                        Icons.warning,
+                                        color: UniformColor,
+                                      ),
+                                      labelText: 'Describe the problem',
+                                      labelStyle: TextStyle(
+                                        color: UniformColor,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: UniformColor, width: 1.0),
+                                      ),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        reportContent = value;
+                                      });
+                                    },
+                                    controller: reportTextController,
+                                  ),
+                                ],
+                              ),
+                              buttons: [
+                                DialogButton(
+                                  child: Text(
+                                    "Submit",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                  onPressed: () {
+                                    if (reportContent == null) {
+                                      print("is null");
+                                    } else {
+                                      reportTextController.clear();
+                                      try {
+                                        _firebase
+                                            .collection('Reports')
+                                            .doc()
+                                            .set({
+                                          'Report': reportContent,
+                                          'Reporter': logedInUser.uid,
+                                          'sentOn':
+                                          FieldValue.serverTimestamp(),
+                                          'PostId': posts.postId,
+                                        });
+
+                                        reportContent = null;
+                                      } catch (e) {
+                                        print(e);
+                                      }
+                                    }
+                                  },
+                                  width: 120,
+                                  color: UniformColor,
+                                )
+                              ],
+                            ).show();
+                          },
                         ),
                       ),
                     ),
@@ -391,7 +547,10 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 1,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 1,
                   height: 0.5,
                   color: Colors.black,
                 ),
@@ -427,17 +586,16 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                             iconSize: 30,
                             onPressed: () {
                               setState(() {
-                                downVote = false;
+                                //downVote = false;
                                 if (upVote == true) {
-                                  upCounter = 0;
                                   votes--;
                                   upVote = false;
                                 } else {
-                                  if (downCounter == 1) {
+                                  if (downVote == true) {
                                     votes++;
-                                    downCounter = 0;
+                                    downVote = false;
                                   }
-                                  upCounter = 1;
+                                  //upCounter = 1;
                                   votes++;
                                   upVote = true;
                                 }
@@ -456,17 +614,17 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                             iconSize: 30,
                             onPressed: () {
                               setState(() {
-                                upVote = false;
+                                //upVote = false;
                                 if (downVote == true) {
-                                  downCounter = 0;
+                                  //downCounter = 0;
                                   votes++;
                                   downVote = false;
                                 } else {
-                                  if (upCounter == 1) {
+                                  if (upVote == true) {
                                     votes--;
-                                    upCounter = 0;
+                                    upVote = false;
                                   }
-                                  downCounter = 1;
+                                  //downCounter = 1;
                                   votes--;
                                   downVote = true;
                                 }
@@ -493,14 +651,15 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                           setState(() {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => CommentsScreen(
-                                  postId: posts.postId,
-                                  postContent: posts.content,
-                                  postVotes: votes,
-                                  numberOfComments: posts.numberOfComments,
-                                  date: posts.date,
-                                  poster: '',
-                                ),
+                                builder: (context) =>
+                                    CommentsScreen(
+                                      postId: posts.postId,
+                                      postContent: posts.content,
+                                      postVotes: votes,
+                                      numberOfComments: posts.numberOfComments,
+                                      date: posts.date,
+                                      poster: posts.poster,
+                                    ),
                               ),
                             );
                           });
@@ -522,11 +681,17 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
 String timeAgo(DateTime d) {
   Duration diff = DateTime.now().difference(d);
   if (diff.inDays > 365)
-    return "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1 ? "year" : "years"} ago";
+    return "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1
+        ? "year"
+        : "years"} ago";
   if (diff.inDays > 30)
-    return "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1 ? "month" : "months"} ago";
+    return "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1
+        ? "month"
+        : "months"} ago";
   if (diff.inDays > 7)
-    return "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1 ? "week" : "weeks"} ago";
+    return "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1
+        ? "week"
+        : "weeks"} ago";
   if (diff.inDays > 0)
     return "${diff.inDays} ${diff.inDays == 1 ? "day" : "days"} ago";
   if (diff.inHours > 0)

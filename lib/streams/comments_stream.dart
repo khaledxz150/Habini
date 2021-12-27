@@ -37,6 +37,7 @@ class CommentsStreamer extends StatelessWidget {
               final date = commentData['sentOn'];
               final commentId=commentData['commentId'];
               final postId = commentData['postId'];
+              final commenter = commentData['commenter'];
 
               final kPost = KComment(
                 content: content,
@@ -44,6 +45,7 @@ class CommentsStreamer extends StatelessWidget {
                 date: date,
                 commentId:commentId ,
                 postId:postId,
+                commenter:commenter,
               );
               commentsContainer.add(kPost);
             }

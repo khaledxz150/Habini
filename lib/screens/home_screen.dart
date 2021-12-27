@@ -17,10 +17,10 @@ Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 
 class HomeIndex extends StatefulWidget {
   @override
-  _HomeIndexState createState() => _HomeIndexState();
+  HomeIndexState createState() => HomeIndexState();
 }
 
-class _HomeIndexState extends State<HomeIndex> {
+class HomeIndexState extends State<HomeIndex> {
   @override
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
@@ -159,13 +159,12 @@ class _HomeIndexState extends State<HomeIndex> {
                       ),
                     ),
                   ),
-
                 ],
               ),
               Expanded(
                 flex: 1,
                 child: RefreshIndicator(
-                  onRefresh: _refresh ,
+                  onRefresh: refresh ,
                   child: ListView.builder(
                     itemCount: _resultsList.length,
                     itemBuilder: (BuildContext context, index) {
@@ -187,7 +186,7 @@ class _HomeIndexState extends State<HomeIndex> {
       ),
     );
   }
-  Future<void> _refresh() {
+  Future<void> refresh() {
     return getPosts();
   }
 }

@@ -14,8 +14,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   bool _isVisible = false;
+  String newAvatar;
 
   @override
   void initState() {
@@ -23,7 +23,6 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     getCurrentUser();
   }
-
 
   void getCurrentUser() {
     try {
@@ -36,21 +35,35 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  void updateUserAvatar(String newAvatar) {
+    setState(() {
+      _firebase
+          .collection('Users')
+          .doc(logedInUser.uid)
+          .update({'avatarUrl': newAvatar});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     getUserAvatar() {
-     return StreamBuilder(
+      return StreamBuilder(
         stream: _firebase.collection('Users').doc(logedInUser.uid).snapshots(),
         builder: (context, snapshot) {
-          print(logedInUser.uid);
           if (!snapshot.hasData) {
-            return Text('Loading');
+            return CircularProgressIndicator();
           }
           var userDocument = snapshot.data;
-          return userDocument["avatarUrl"];
+          return CircleAvatar(
+            radius: 100,
+            backgroundImage: NetworkImage(
+              userDocument["avatarUrl"],
+            ),
+          );
         },
       );
     }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -90,10 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-             CircleAvatar(
-               radius: 100,
-               backgroundImage: NetworkImage(getUserAvatar().toString()),
-             ),
+              getUserAvatar(),
               PostStreamer(
                 logedInUser: logedInUser,
               ),
@@ -133,6 +143,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     IconButton(
                       onPressed: () {
                         setState(() {
+                          updateUserAvatar(
+                              'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2F1bdc9a33850498.56ba69ac2ba5b.png?alt=media&token=e400938f-f383-4e61-a5db-0c8ed409f6e1');
                           _isVisible = false;
                         });
                       },
@@ -142,6 +154,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     IconButton(
                       onPressed: () {
                         setState(() {
+                          updateUserAvatar(
+                              'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Ff9fa8a33850498.56ba69ac2cc3a.png?alt=media&token=2e74444d-d8d8-4f33-80d2-b053438167fd');
                           _isVisible = false;
                         });
                       },
@@ -151,6 +165,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     IconButton(
                       onPressed: () {
                         setState(() {
+                          updateUserAvatar(
+                              'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2F2c659933850498.56ba69ac2e080.png?alt=media&token=9bd450b6-27d1-4284-bafc-21e0c0221f2a');
+
                           _isVisible = false;
                         });
                       },
@@ -160,6 +177,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     IconButton(
                       onPressed: () {
                         setState(() {
+                          updateUserAvatar(
+                              'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2F64623a33850498.56ba69ac2a6f7.png?alt=media&token=83c8154a-7e63-4c86-9dc9-2d7ec862654a');
                           _isVisible = false;
                         });
                       },
@@ -169,6 +188,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     IconButton(
                       onPressed: () {
                         setState(() {
+                          updateUserAvatar(
+                              'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2F84c20033850498.56ba69ac290ea.png?alt=media&token=e0c8e9ce-0259-41b1-8341-851ae52961db');
+
                           _isVisible = false;
                         });
                       },
@@ -178,6 +200,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     IconButton(
                       onPressed: () {
                         setState(() {
+                          updateUserAvatar(
+                              'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2FNetflix-avatar.png?alt=media&token=092a24a9-6c56-4dce-86e2-5910610f017a');
+
                           _isVisible = false;
                         });
                       },
@@ -187,6 +212,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     IconButton(
                       onPressed: () {
                         setState(() {
+                          updateUserAvatar(
+                              'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fflat%2C1000x1000%2C075%2Cf.u2.jpg?alt=media&token=55f42e1c-3ecc-4840-b8a4-5d2f6c50f1f9');
                           _isVisible = false;
                         });
                       },
@@ -196,13 +223,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     IconButton(
                       onPressed: () {
                         setState(() {
+                          updateUserAvatar(
+                              'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fe70b1333850498.56ba69ac32ae3.png?alt=media&token=dbe1ea6a-59da-4917-ba8a-c053bbe877ed');
+
                           _isVisible = false;
                         });
                       },
                       icon: Image.network(
                           'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fe70b1333850498.56ba69ac32ae3.png?alt=media&token=dbe1ea6a-59da-4917-ba8a-c053bbe877ed'),
                     ),
-
                   ],
                 ),
               ),

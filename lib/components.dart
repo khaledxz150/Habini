@@ -118,6 +118,7 @@ class KPostContainer extends StatefulWidget {
   int upCounter = 0;
   final postId;
   final bool isMe;
+  final poster;
 
   KPostContainer({
     this.isMe,
@@ -126,6 +127,7 @@ class KPostContainer extends StatefulWidget {
     this.votes,
     this.date,
     this.numberOfComments,
+    this.poster,
   });
 
   @override
@@ -157,16 +159,16 @@ class _KPostContainerState extends State<KPostContainer> {
   }
 
   getData() async {
-      DocumentSnapshot votes = await _firebase
-          .collection('Posts')
-          .doc(widget.postId)
-          .collection('Voters')
-          .doc(logedInUser.uid)
-          .get();
-      setState(() {
-        downVote = votes['downVote'];
-        upVote = votes['upVote'];
-      });
+    DocumentSnapshot votes = await _firebase
+        .collection('Posts')
+        .doc(widget.postId)
+        .collection('Voters')
+        .doc(logedInUser.uid)
+        .get();
+    setState(() {
+      downVote = votes['downVote'];
+      upVote = votes['upVote'];
+    });
   }
 
   checkIfLikedOrNot() async {
@@ -262,469 +264,215 @@ class _KPostContainerState extends State<KPostContainer> {
     }
   }
 
+  getUserAvatar() {
+    return StreamBuilder(
+      stream: _firebase.collection('Users').doc(widget.poster).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        var userDocument = snapshot.data;
+        return CircleAvatar(
+          backgroundImage: NetworkImage(
+            userDocument["avatarUrl"],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (widget.isMe) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 4), // changes position of shadow
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-        margin: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                      child: CircleAvatar(
-                        backgroundColor: UniformColor,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.4),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 4), // changes position of shadow
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+      margin: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                    child: getUserAvatar(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, top: 6),
+                    child: Text(
+                      'Me',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12,top: 6),
-                      child: Text(
-                        'Me',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                  ),
+                ],
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      timeAgo(widget.date.toDate()),
+                    ),
+                  ])
+            ],
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Opacity(
+            opacity: 0.5,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 1,
+                height: 0.5,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            padding: EdgeInsets.all(5.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.content,
+              ),
+            ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_drop_up,
+                            color: upVote ? UniformColor : Colors.black,
+                          ),
+                          tooltip: 'Up vote',
+                          iconSize: 30,
+                          onPressed: () {
+                            setState(() {
+                              if (upVote == true) {
+                                widget.votes--;
+                                upVote = false;
+                              } else {
+                                if (downVote == true) {
+                                  widget.votes++;
+                                  downVote = false;
+                                }
+                                widget.votes++;
+                                upVote = true;
+                              }
+                              updateVotesNumber();
+                            });
+                            saveVoter();
+                          },
                         ),
-                      ),
+                        Text(
+                          widget.votes.toString(),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: downVote ? UniformColor : Colors.black,
+                          ),
+                          tooltip: 'Down vote',
+                          iconSize: 30,
+                          onPressed: () {
+                            setState(() {
+                              if (downVote == true) {
+                                widget.votes++;
+                                downVote = false;
+                              } else {
+                                if (upVote == true) {
+                                  widget.votes--;
+                                  upVote = false;
+                                }
+                                //downCounter = 1;
+                                widget.votes--;
+                                downVote = true;
+                              }
+                              updateVotesNumber();
+                            });
+                            saveVoter();
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        timeAgo(widget.date.toDate()),
-                      ),
-                    ])
-              ],
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Opacity(
-              opacity: 0.5,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 0.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 1,
-                  height: 0.5,
-                  color: Colors.black,
-                ),
               ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              padding: EdgeInsets.all(5.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  widget.content,
-                ),
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.arrow_drop_up,
-                              color: upVote ? UniformColor : Colors.black,
-                            ),
-                            tooltip: 'Up vote',
-                            iconSize: 30,
-                            onPressed: () {
-                              setState(() {
-                                if (upVote == true) {
-                                  widget.upCounter = 0;
-                                  widget.votes--;
-                                  upVote = false;
-                                } else {
-                                  if (widget.downCounter == 1) {
-                                    widget.votes++;
-                                    widget.downCounter = 0;
-                                  }
-                                  if (downVote==true)
-                                  {
-                                    widget.votes++;
-                                    downVote = false;
-                                  }
-                                  widget.upCounter = 1;
-                                  widget.votes++;
-                                  upVote = true;
-                                }
-                                updateVotesNumber();
-                              });
-                              saveVoter();
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.arrow_drop_down,
-                              color: downVote ? UniformColor : Colors.black,
-                            ),
-                            tooltip: 'Down vote',
-                            iconSize: 30,
-                            onPressed: () {
-                              setState(() {
-                                if (downVote == true) {
-                                  widget.downCounter = 0;
-                                  widget.votes++;
-                                  downVote = false;
-                                } else {
-                                  if (widget.upCounter == 1) {
-                                    widget.votes--;
-                                    widget.upCounter = 0;
-                                  }
-                                  if (upVote==true)
-                                    {
-                                      widget.votes--;
-                                      upVote = false;
-                                    }
-                                  widget.downCounter = 1;
-                                  widget.votes--;
-                                  downVote = true;
-                                }
-                                updateVotesNumber();
-                              });
-                              saveVoter();
-                            },
-                          ),
-                        ],
-                      ),
-                      Text(
-                        widget.votes.toString(),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 12.0, bottom: 3.0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.comment),
-                        tooltip: 'Comment',
-                        iconSize: 28,
-                        onPressed: () {
-                          setState(() {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CommentsScreen(
-                                  postId: widget.postId,
-                                  postContent: widget.content,
-                                  postVotes: widget.votes,
-                                  numberOfComments: widget.numberOfComments,
-                                  date: widget.date,
-                                  poster: 'Owner',
-                                ),
+              Padding(
+                padding: const EdgeInsets.only(right: 12.0, bottom: 3.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.comment),
+                      tooltip: 'Comment',
+                      iconSize: 28,
+                      onPressed: () {
+                        setState(() {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CommentsScreen(
+                                postId: widget.postId,
+                                postContent: widget.content,
+                                postVotes: widget.votes,
+                                numberOfComments: widget.numberOfComments,
+                                date: widget.date,
+                                poster: widget.poster,
                               ),
-                            );
-                          });
-                        },
-                      ),
-                      Text(
-                        widget.numberOfComments.toString(),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      );
-    } else {
-      return Container(
-        key: _scaffoldkey,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 4), // changes position of shadow
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-        margin: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                  child: CircleAvatar(
-                    backgroundColor: UniformColor,
-                  ),
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        timeAgo(widget.date.toDate()),
-                      ),
-                      FlatButton(
-                        minWidth: 20,
-                        onPressed: () {
-                          Alert(
-                            context: context,
-                            title: "Report",
-                            content: Column(
-                              children: <Widget>[
-                                TextField(
-                                  decoration: InputDecoration(
-                                    icon: Icon(
-                                      Icons.warning,
-                                      color: UniformColor,
-                                    ),
-                                    labelText: 'Describe the problem',
-                                    labelStyle: TextStyle(
-                                      color: UniformColor,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: UniformColor, width: 1.0),
-                                    ),
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      reportContent = value;
-                                    });
-                                  },
-                                  controller: reportTextController,
-                                ),
-                              ],
                             ),
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "Submit",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () {
-                                  if (reportContent == null) {
-                                    print("is null");
-                                  } else {
-                                    reportTextController.clear();
-                                    try {
-                                      _firebase
-                                          .collection('Reports')
-                                          .doc()
-                                          .set({
-                                        'Report': reportContent,
-                                        'Reporter': logedInUser.uid,
-                                        'sentOn': FieldValue.serverTimestamp(),
-                                        'PostId': widget.postId,
-                                      });
-
-                                      reportContent = null;
-                                    } catch (e) {
-                                      print(e);
-                                    }
-                                    setState(() {
-                                      showSpinner = false;
-                                    });
-                                  }
-                                },
-                                width: 120,
-                                color: UniformColor,
-                              )
-                            ],
-                          ).show();
-                        },
-                        child: Icon(
-                          Icons.warning,
-                        ),
-                      ),
-                    ]),
-              ],
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Opacity(
-              opacity: 0.5,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 0.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 1,
-                  height: 0.5,
-                  color: Colors.black,
+                          );
+                        });
+                      },
+                    ),
+                    Text(
+                      widget.numberOfComments.toString(),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              padding: EdgeInsets.all(5.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  widget.content,
-                ),
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.arrow_drop_up,
-                              color: upVote ? UniformColor : Colors.black,
-                            ),
-                            tooltip: 'Up vote',
-                            iconSize: 30,
-                            onPressed: () {
-                              setState(() {
-
-                                if (upVote == true) {
-                                  widget.upCounter = 0;
-                                  widget.votes--;
-                                  upVote = false;
-                                } else {
-                                  if (widget.downCounter == 1) {
-                                    widget.votes++;
-                                    widget.downCounter = 0;
-                                  }
-                                  if (downVote==true)
-                                  {
-                                    widget.votes++;
-                                    downVote = false;
-                                  }
-                                  widget.upCounter = 1;
-                                  widget.votes++;
-                                  upVote = true;
-                                }
-                                updateVotesNumber();
-                              });
-                              saveVoter();
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.arrow_drop_down,
-                              color: downVote ? UniformColor : Colors.black,
-                            ),
-                            tooltip: 'Down vote',
-                            iconSize: 30,
-                            onPressed: () {
-                              setState(() {
-                                if (downVote == true) {
-                                  widget.downCounter = 0;
-                                  widget.votes++;
-                                  downVote = false;
-                                } else {
-                                  if (widget.upCounter == 1) {
-                                    widget.votes--;
-                                    widget.upCounter = 0;
-                                  }
-                                  if (upVote==true)
-                                  {
-                                    widget.votes--;
-                                    upVote = false;
-                                  }
-                                  widget.downCounter = 1;
-                                  widget.votes--;
-                                  downVote = true;
-                                }
-                                updateVotesNumber();
-                              });
-                              saveVoter();
-                            },
-                          ),
-                        ],
-                      ),
-                      Text(
-                        widget.votes.toString(),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 12.0, bottom: 3.0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.comment),
-                        tooltip: 'Comment',
-                        iconSize: 28,
-                        onPressed: () {
-                          setState(() {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CommentsScreen(
-                                  postId: widget.postId,
-                                  postContent: widget.content,
-                                  postVotes: widget.votes,
-                                  numberOfComments: widget.numberOfComments,
-                                  date: widget.date,
-                                  poster: '',
-                                ),
-                              ),
-                            );
-                          });
-                        },
-                      ),
-                      Text(
-                        widget.numberOfComments.toString(),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      );
-    }
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
 
 class KComment extends StatefulWidget {
   final String content;
-  int votes= 0 ;
+  int votes = 0;
   Timestamp date;
   int downCounter = 0;
   int upCounter = 0;
   int numberOfComments = 0;
   final postId;
   final commentId;
+  final commenter;
 
   KComment({
     this.commentId,
@@ -732,6 +480,7 @@ class KComment extends StatefulWidget {
     this.votes,
     this.date,
     this.content,
+    this.commenter,
   });
 
   @override
@@ -769,7 +518,9 @@ class _KCommentState extends State<KComment> {
         .collection('Posts')
         .doc(widget.postId)
         .collection('Comments')
-        .doc(widget.commentId).collection('Voters').doc(logedInUser.uid)
+        .doc(widget.commentId)
+        .collection('Voters')
+        .doc(logedInUser.uid)
         .get();
     setState(() {
       downVote = votes['downVote'];
@@ -788,53 +539,79 @@ class _KCommentState extends State<KComment> {
       isVoted = ds.exists;
     });
   }
+
   void saveVoter() {
-      try {
-        _firebase
-            .collection('Posts')
-            .doc(widget.postId)
-            .collection('Comments')
-            .doc(widget.commentId).collection('Voters').doc(logedInUser.uid)
-            .set({
-          'downVote': downVote,
-          'upVote': upVote,
-          'sentOn': FieldValue.serverTimestamp(),
-        });
-      } catch (ex) {
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Connection error",
-          desc: "Please check your internet connection",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Back",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-              width: 120,
+    try {
+      _firebase
+          .collection('Posts')
+          .doc(widget.postId)
+          .collection('Comments')
+          .doc(widget.commentId)
+          .collection('Voters')
+          .doc(logedInUser.uid)
+          .set({
+        'downVote': downVote,
+        'upVote': upVote,
+        'sentOn': FieldValue.serverTimestamp(),
+      });
+    } catch (ex) {
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "Connection error",
+        desc: "Please check your internet connection",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "Back",
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
-          ],
-        ).show();
-      }
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+          ),
+        ],
+      ).show();
+    }
 
     if (upVote == false && downVote == false) {
       _firebase
           .collection('Posts')
           .doc(widget.postId)
           .collection('Comments')
-          .doc(widget.commentId).collection('Voters').doc(logedInUser.uid)
+          .doc(widget.commentId)
+          .collection('Voters')
+          .doc(logedInUser.uid)
           .delete();
     }
   }
+
   void updateVotesNumber() {
     setState(() {
       _firebase
           .collection('Posts')
-          .doc(widget.postId).collection('Comments').doc(widget.commentId)
+          .doc(widget.postId)
+          .collection('Comments')
+          .doc(widget.commentId)
           .update({'votesNumber': widget.votes});
     });
+  }
+
+  getUserAvatar() {
+    return StreamBuilder(
+      stream: _firebase.collection('Users').doc(widget.commenter).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        var userDocument = snapshot.data;
+        return CircleAvatar(
+          radius: 16,
+          backgroundImage: NetworkImage(
+            userDocument["avatarUrl"],
+          ),
+        );
+      },
+    );
   }
 
   Widget build(BuildContext context) {
@@ -848,10 +625,7 @@ class _KCommentState extends State<KComment> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                child: CircleAvatar(
-                  radius: 16,
-                  backgroundColor: UniformColor,
-                ),
+                child: getUserAvatar(),
               ),
               Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -909,8 +683,7 @@ class _KCommentState extends State<KComment> {
                         widget.votes++;
                         widget.downCounter = 0;
                       }
-                      if (downVote==true)
-                      {
+                      if (downVote == true) {
                         widget.votes++;
                         downVote = false;
                       }
@@ -944,8 +717,7 @@ class _KCommentState extends State<KComment> {
                         widget.votes--;
                         widget.upCounter = 0;
                       }
-                      if (upVote==true)
-                      {
+                      if (upVote == true) {
                         widget.votes--;
                         upVote = false;
                       }

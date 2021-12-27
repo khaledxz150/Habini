@@ -250,7 +250,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
 }
 
 class CurrentPost extends StatefulWidget {
-  String poster  ;
+  final poster  ;
   final String content;
   int votes = 0;
   final date;
@@ -274,6 +274,24 @@ class _CurrentPostState extends State<CurrentPost> {
   @override
   bool downVote = false;
   bool upVote = false;
+
+  getUserAvatar() {
+    return StreamBuilder(
+      stream: _firebase.collection('Users').doc(widget.poster).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        var userDocument = snapshot.data;
+        return  CircleAvatar(
+          backgroundImage:
+          NetworkImage(
+            userDocument["avatarUrl"],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -299,16 +317,7 @@ class _CurrentPostState extends State<CurrentPost> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                child: CircleAvatar(
-                  backgroundColor: UniformColor,
-                  child:Text(
-                    widget.poster,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
+                child: getUserAvatar(),
               ),
               Text(timeAgo(widget.date.toDate())),
             ],

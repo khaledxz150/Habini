@@ -22,6 +22,7 @@ void storeUserData() async {
     _firebase.collection('Users').doc(uid).set({
       'phoneNumber': logedIn.phoneNumber,
       'UID': logedIn.uid,
+      'avatarUrl':'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fweb_hi_res_512.png?alt=media&token=07cfcead-28a4-400e-81c6-6c879139d26b',
     });
   } catch (e) {
     print(e);

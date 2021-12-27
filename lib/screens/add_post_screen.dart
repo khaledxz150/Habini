@@ -51,6 +51,22 @@ class _AddPostState extends State<AddPost> {
   }
 
   Widget build(BuildContext context) {
+    getUserAvatar() {
+      return StreamBuilder(
+        stream: _firebase.collection('Users').doc(logedInUser.uid).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+          var userDocument = snapshot.data;
+          return CircleAvatar(
+            backgroundImage: NetworkImage(
+              userDocument["avatarUrl"],
+            ),
+          );
+        },
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.white60,
       appBar: AppBar(
@@ -95,9 +111,7 @@ class _AddPostState extends State<AddPost> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                        child: CircleAvatar(
-                          backgroundColor: UniformColor,
-                        ),
+                        child: getUserAvatar(),
                       ),
                     ],
                   ),

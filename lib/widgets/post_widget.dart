@@ -33,6 +33,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
   int votes = 0;
   String reportContent = null;
   final reportTextController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
     getCurrentUser();
     getVotes();
   }
+
 
   getData() async {
     DocumentSnapshot votes = await _firebase
@@ -65,6 +67,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
       votes = votesData['votesNumber'];
     });
   }
+
 
   void getCurrentUser() {
     try {
@@ -148,46 +151,79 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
   }
 
   Widget build(BuildContext context) {
+    getData();
     final posts = Posts.fromSnapshot(widget.document);
+
+    storeNotificationUpVote(){
+      _firebase.collection('Notifications').doc().set({
+        'to': posts.poster,
+        'from': logedInUser.uid,
+        'sentOn': FieldValue.serverTimestamp(),
+        'content':'Someone up voted your post',
+      });
+    }
+    storeNotificationDownVote(){
+      _firebase.collection('Notifications').doc().set({
+        'to': posts.poster,
+        'from': logedInUser.uid,
+        'sentOn': FieldValue.serverTimestamp(),
+        'content':'Someone Down voted your post',
+      });
+    }
+
     getVotes() {
-      return new StreamBuilder(
-          stream: _firebase.collection('Posts').doc(posts.postId).snapshots(),
+      try {
+        return new FutureBuilder(
+          future: _firebase.collection('Posts').doc(posts.postId).get(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return CircularProgressIndicator();
             }
             var userDocument = snapshot.data;
             return new Text(userDocument["votesNumber"].toString());
-          });
+          },
+        );
+      } catch (e) {
+        print(e);
+      }
     }
 
     getUserAvatar() {
-      return StreamBuilder(
-        stream: _firebase.collection('Users').doc(posts.poster).snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return CircularProgressIndicator();
-          }
-          var userDocument = snapshot.data;
-          return CircleAvatar(
-            backgroundImage: NetworkImage(
-              userDocument["avatarUrl"],
-            ),
-          );
-        },
-      );
+      try {
+        return StreamBuilder(
+          stream: _firebase.collection('Users').doc(posts.poster).snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return CircularProgressIndicator();
+            }
+            var userDocument = snapshot.data;
+            return CircleAvatar(
+              backgroundImage: NetworkImage(
+                userDocument["avatarUrl"],
+              ),
+            );
+          },
+        );
+      } catch (e) {
+        print(e);
+      }
     }
 
     getCommentsNumber() {
-      return new StreamBuilder(
-          stream: _firebase.collection('Posts').doc(posts.postId).snapshots(),
+      try {
+        return new FutureBuilder(
+          future: _firebase.collection('Posts').doc(posts.postId).get(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return CircularProgressIndicator();
             }
             var userDocument = snapshot.data;
             return new Text(userDocument["numOfComments"].toString());
-          });
+          },
+        );
+      } catch (e) {
+        print(e);
+      }
     }
 
     if (logedInUser.uid == posts.poster) {
@@ -236,51 +272,86 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                     Text(
                       timeAgo(posts.date.toDate()),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Container(
-                        width: 40,
-                        child: DropdownButton(
-                          isExpanded: true,
-                          items: [
-                            'Delete',
-                          ].map((String value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (_) {
-                            Alert(
-                              context: context,
-                              type: AlertType.warning,
-                              title: "Delete your post",
-                              desc:
-                              "are you sure you want to delete your post ?",
-                              buttons: [
-                                DialogButton(
-                                  child: Text(
-                                    "Yes",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
-                                  ),
-                                  onPressed: () {
-                                    _firebase
-                                        .collection('Posts')
-                                        .doc(posts.postId)
-                                        .delete();
-                                    setState(() {
-                                      HomeIndexState().getPosts();
-                                    });
-                                  },
-                                  color: Color.fromRGBO(0, 179, 134, 1.0),
-                                ),
-                              ],
-                            ).show();
-                          },
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(right: 8.0),
+                    //   child: Container(
+                    //     width: 40,
+                    //     child: DropdownButton(
+                    //       isExpanded: true,
+                    //       items: [
+                    //         'Delete',
+                    //       ].map((String value) {
+                    //         return DropdownMenuItem(
+                    //           value: value,
+                    //           child: Text(value),
+                    //         );
+                    //       }).toList(),
+                    //       onChanged: (_) {
+                    //         Alert(
+                    //           context: context,
+                    //           type: AlertType.warning,
+                    //           title: "Delete your post",
+                    //           desc:
+                    //               "are you sure you want to delete your post ?",
+                    //           buttons: [
+                    //             DialogButton(
+                    //               child: Text(
+                    //                 "Yes",
+                    //                 style: TextStyle(
+                    //                     color: Colors.white, fontSize: 20),
+                    //               ),
+                    //               onPressed: () async {
+                    //                 // try {
+                    //                 //   await _firebase
+                    //                 //       .collection('Posts')
+                    //                 //       .doc(posts.postId)
+                    //                 //       .collection('Voters')
+                    //                 //       .get()
+                    //                 //       .then(
+                    //                 //         (snapshot) {
+                    //                 //       for (DocumentSnapshot ds
+                    //                 //       in snapshot.docs) {
+                    //                 //         ds.reference.delete();
+                    //                 //       }
+                    //                 //     },
+                    //                 //   );
+                    //                 //   await _firebase
+                    //                 //       .collection('Posts')
+                    //                 //       .doc(posts.postId)
+                    //                 //       .collection('Comments')
+                    //                 //       .get()
+                    //                 //       .then(
+                    //                 //         (snapshot) {
+                    //                 //       for (DocumentSnapshot ds
+                    //                 //       in snapshot.docs) {
+                    //                 //         ds.reference.delete();
+                    //                 //       }
+                    //                 //     },
+                    //                 //   );
+                    //                 //   await _firebase
+                    //                 //       .collection('Posts')
+                    //                 //       .doc(posts.postId)
+                    //                 //       .delete();
+                    //                 // } catch (e) {
+                    //                 //   print(e);
+                    //                 // }
+                    //                 // Navigator.pushAndRemoveUntil(
+                    //                 //   context,
+                    //                 //   MaterialPageRoute(
+                    //                 //     builder: (BuildContext context) =>
+                    //                 //         ProfilePage(),
+                    //                 //   ),
+                    //                 //       (route) => false,
+                    //                 // );
+                    //               },
+                    //               color: Color.fromRGBO(0, 179, 134, 1.0),
+                    //             ),
+                    //           ],
+                    //         ).show();
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 )
               ],
@@ -293,10 +364,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0.0),
                 child: Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 1,
+                  width: MediaQuery.of(context).size.width * 1,
                   height: 0.5,
                   color: Colors.black,
                 ),
@@ -347,6 +415,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                                 updateVotesNumber();
                               });
                               saveVoter();
+
                             },
                           ),
                           getVotes(),
@@ -395,15 +464,14 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                           setState(() {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    CommentsScreen(
-                                      postId: posts.postId,
-                                      postContent: posts.content,
-                                      postVotes: votes,
-                                      numberOfComments: posts.numberOfComments,
-                                      date: posts.date,
-                                      poster: posts.poster,
-                                    ),
+                                builder: (context) => CommentsScreen(
+                                  postId: posts.postId,
+                                  postContent: posts.content,
+                                  postVotes: votes,
+                                  numberOfComments: posts.numberOfComments,
+                                  date: posts.date,
+                                  poster: posts.poster,
+                                ),
                               ),
                             );
                           });
@@ -516,7 +584,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                                           'Report': reportContent,
                                           'Reporter': logedInUser.uid,
                                           'sentOn':
-                                          FieldValue.serverTimestamp(),
+                                              FieldValue.serverTimestamp(),
                                           'PostId': posts.postId,
                                         });
 
@@ -524,6 +592,13 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                                       } catch (e) {
                                         print(e);
                                       }
+                                      FocusScope.of(context).unfocus();
+                                      _scaffoldkey.currentState.showSnackBar(
+                                        SnackBar(
+                                          content:
+                                          Text('Report Sent Successfully'),
+                                        ),
+                                      );
                                     }
                                   },
                                   width: 120,
@@ -547,10 +622,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0.0),
                 child: Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 1,
+                  width: MediaQuery.of(context).size.width * 1,
                   height: 0.5,
                   color: Colors.black,
                 ),
@@ -602,6 +674,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                                 updateVotesNumber();
                               });
                               saveVoter();
+                              storeNotificationUpVote();
                             },
                           ),
                           getVotes(),
@@ -631,6 +704,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                                 updateVotesNumber();
                               });
                               saveVoter();
+                              storeNotificationDownVote();
                             },
                           ),
                         ],
@@ -651,15 +725,14 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                           setState(() {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    CommentsScreen(
-                                      postId: posts.postId,
-                                      postContent: posts.content,
-                                      postVotes: votes,
-                                      numberOfComments: posts.numberOfComments,
-                                      date: posts.date,
-                                      poster: posts.poster,
-                                    ),
+                                builder: (context) => CommentsScreen(
+                                  postId: posts.postId,
+                                  postContent: posts.content,
+                                  postVotes: votes,
+                                  numberOfComments: posts.numberOfComments,
+                                  date: posts.date,
+                                  poster: posts.poster,
+                                ),
                               ),
                             );
                           });
@@ -681,17 +754,11 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
 String timeAgo(DateTime d) {
   Duration diff = DateTime.now().difference(d);
   if (diff.inDays > 365)
-    return "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1
-        ? "year"
-        : "years"} ago";
+    return "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1 ? "year" : "years"} ago";
   if (diff.inDays > 30)
-    return "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1
-        ? "month"
-        : "months"} ago";
+    return "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1 ? "month" : "months"} ago";
   if (diff.inDays > 7)
-    return "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1
-        ? "week"
-        : "weeks"} ago";
+    return "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1 ? "week" : "weeks"} ago";
   if (diff.inDays > 0)
     return "${diff.inDays} ${diff.inDays == 1 ? "day" : "days"} ago";
   if (diff.inHours > 0)

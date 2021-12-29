@@ -172,10 +172,14 @@ class HomeIndexState extends State<HomeIndex> {
                       if (logedInUser.uid == posts.poster) {
                         meIs = true;
                       }
-                      return KPostContainerV2(
-                        isMe:meIs,
-                        document: _resultsList[index],
-                      );
+                     try{
+                       return KPostContainerV2(
+                         isMe:meIs,
+                         document: _resultsList[index],
+                       );
+                     }catch(e){
+                        return CircularProgressIndicator();
+                     }
                     },
                   ),
                 ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:habini/screens/profile_screen.dart';
-
 import 'package:habini/screens/save_user_data.dart';
 import 'package:habini/screens/sign_up_screen.dart';
 import 'package:habini/screens/welcome_screen.dart';
@@ -12,6 +12,8 @@ import 'package:habini/screens/navigation_page.dart';
 import 'package:habini/screens/university_number_auth_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habini/screens/comments_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,13 +23,13 @@ void main() async {
 
 class habini extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WelcomeScreen(),
       initialRoute: 'welcome_screen',
       routes: {
-        'profile_page':(context)=> ProfilePage(),
+        'profile_page': (context) => ProfilePage(),
         'save_user_data': (context) => SaveUserData(),
         'welcome_screen': (context) => WelcomeScreen(),
         'navigation_page': (context) => MyBottomNavigationBar(),

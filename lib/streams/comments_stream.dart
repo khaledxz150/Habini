@@ -40,6 +40,8 @@ class CommentsStreamer extends StatelessWidget {
               final commenter = commentData['commenter'];
 
               final kPost = KComment(
+                downVote:false,
+                upVote:false ,
                 content: content,
                 votes: votes,
                 date: date,

@@ -24,7 +24,8 @@ class CommentsScreen extends StatefulWidget {
   final postVotes;
   final postId;
   final date;
-  String poster ;
+  String poster;
+
   CommentsScreen({
     this.poster,
     this.date,
@@ -97,6 +98,15 @@ class _CommentsScreenState extends State<CommentsScreen> {
       // backgroundColor: Color.fromRGBO(60, 174, 163, 0),
       appBar: AppBar(
         backgroundColor: UniformColor,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Row(
           children: [
             Icon(
@@ -105,18 +115,20 @@ class _CommentsScreenState extends State<CommentsScreen> {
             SizedBox(
               width: 20.0,
             ),
-            Text('Comments',
-                style: GoogleFonts.koHo(
-                  color: Colors.white,
-                  fontSize: 25,
-                )),
+            Text(
+              'Comments',
+              style: GoogleFonts.koHo(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
           ],
         ),
       ),
       body: ListView(
         children: <Widget>[
           CurrentPost(
-            poster : widget.poster,
+            poster: widget.poster,
             date: widget.date,
             content: widget.postContent.toString(),
             numberOfComments: widget.numberOfComments,
@@ -165,11 +177,17 @@ class _CommentsScreenState extends State<CommentsScreen> {
                           ],
                         ).show();
                       }
-                      if (commentContent == null || commentContent.trim() == "") {
+                      if (commentContent == null ||
+                          commentContent.trim() == "") {
                       } else {
                         commentTextController.clear();
 
-                        String id = _firebase.collection('Posts').doc(widget.postId).collection('Comments').doc().id;
+                        String id = _firebase
+                            .collection('Posts')
+                            .doc(widget.postId)
+                            .collection('Comments')
+                            .doc()
+                            .id;
                         try {
                           _firebase
                               .collection('Posts')
@@ -181,8 +199,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             'commenter': logedInUser.uid,
                             'sentOn': FieldValue.serverTimestamp(),
                             'votesNumber': commentVotes,
-                            'commentId':id,
-                            'postId':widget.postId,
+                            'commentId': id,
+                            'postId': widget.postId,
                           });
                           commentContent = null;
                         } catch (ex) {
@@ -250,7 +268,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
 }
 
 class CurrentPost extends StatefulWidget {
-  final poster  ;
+  final poster;
+
   final String content;
   int votes = 0;
   final date;
@@ -283,9 +302,8 @@ class _CurrentPostState extends State<CurrentPost> {
           return CircularProgressIndicator();
         }
         var userDocument = snapshot.data;
-        return  CircleAvatar(
-          backgroundImage:
-          NetworkImage(
+        return CircleAvatar(
+          backgroundImage: NetworkImage(
             userDocument["avatarUrl"],
           ),
         );
@@ -345,10 +363,7 @@ class _CurrentPostState extends State<CurrentPost> {
               alignment: Alignment.centerLeft,
               child: Text(
                 widget.content,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20
-                ),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
               ),
             ),
           ),

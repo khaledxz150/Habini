@@ -74,7 +74,9 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                'navigation_page',
+                    (Route<dynamic> route) => false);
           },
         ),
       ),

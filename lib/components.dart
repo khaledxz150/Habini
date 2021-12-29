@@ -3,10 +3,12 @@ import 'package:habini/screens/comments_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:habini/screens/profile_screen.dart';
 import 'package:habini/screens/save_user_data.dart';
 import 'package:intl/intl.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:habini/screens/navigation_page.dart';
+import 'package:habini/screens/profile_screen.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
@@ -283,6 +285,7 @@ class _KPostContainerState extends State<KPostContainer> {
 
   @override
   Widget build(BuildContext context) {
+    getData();
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -326,6 +329,86 @@ class _KPostContainerState extends State<KPostContainer> {
                   children: <Widget>[
                     Text(
                       timeAgo(widget.date.toDate()),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Container(
+                        width: 40,
+                        child: DropdownButton(
+                          isExpanded: true,
+                          items: [
+                            'Delete',
+                          ].map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (_) {
+                            Alert(
+                              context: context,
+                              type: AlertType.warning,
+                              title: "Delete your post",
+                              desc:
+                                  "are you sure you want to delete your post ?",
+                              buttons: [
+                                DialogButton(
+                                  child: Text(
+                                    "Yes",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                  onPressed: () async {
+                                    try {
+                                      await _firebase
+                                          .collection('Posts')
+                                          .doc(widget.postId)
+                                          .collection('Voters')
+                                          .get()
+                                          .then(
+                                        (snapshot) {
+                                          for (DocumentSnapshot ds
+                                              in snapshot.docs) {
+                                            ds.reference.delete();
+                                          }
+                                        },
+                                      );
+                                      await _firebase
+                                          .collection('Posts')
+                                          .doc(widget.postId)
+                                          .collection('Comments')
+                                          .get()
+                                          .then(
+                                            (snapshot) {
+                                          for (DocumentSnapshot ds
+                                          in snapshot.docs) {
+                                            ds.reference.delete();
+                                          }
+                                        },
+                                      );
+                                      await _firebase
+                                          .collection('Posts')
+                                          .doc(widget.postId)
+                                          .delete();
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ProfilePage(),
+                                      ),
+                                      (route) => false,
+                                    );
+                                  },
+                                  color: Color.fromRGBO(0, 179, 134, 1.0),
+                                ),
+                              ],
+                            ).show();
+                          },
+                        ),
+                      ),
                     ),
                   ])
             ],
@@ -473,8 +556,12 @@ class KComment extends StatefulWidget {
   final postId;
   final commentId;
   final commenter;
+  bool downVote = false;
+  bool upVote = false;
 
   KComment({
+    this.upVote,
+    this.downVote,
     this.commentId,
     this.postId,
     this.votes,
@@ -489,8 +576,7 @@ class KComment extends StatefulWidget {
 
 class _KCommentState extends State<KComment> {
   @override
-  bool downVote = false;
-  bool upVote = false;
+
   bool isVoted;
 
   @override
@@ -523,8 +609,8 @@ class _KCommentState extends State<KComment> {
         .doc(logedInUser.uid)
         .get();
     setState(() {
-      downVote = votes['downVote'];
-      upVote = votes['upVote'];
+      widget.downVote = votes['downVote'];
+      widget.upVote = votes['upVote'];
     });
   }
 
@@ -550,8 +636,8 @@ class _KCommentState extends State<KComment> {
           .collection('Voters')
           .doc(logedInUser.uid)
           .set({
-        'downVote': downVote,
-        'upVote': upVote,
+        'downVote': widget.downVote,
+        'upVote': widget.upVote,
         'sentOn': FieldValue.serverTimestamp(),
       });
     } catch (ex) {
@@ -573,7 +659,7 @@ class _KCommentState extends State<KComment> {
       ).show();
     }
 
-    if (upVote == false && downVote == false) {
+    if (widget.upVote == false && widget.downVote == false) {
       _firebase
           .collection('Posts')
           .doc(widget.postId)
@@ -615,6 +701,9 @@ class _KCommentState extends State<KComment> {
   }
 
   Widget build(BuildContext context) {
+    setState(() {
+      getData();
+    });
     return Container(
       padding: EdgeInsets.all(10),
       color: Colors.grey[200],
@@ -668,28 +757,28 @@ class _KCommentState extends State<KComment> {
               IconButton(
                 icon: Icon(
                   Icons.arrow_drop_up,
-                  color: upVote ? UniformColor : Colors.black,
+                  color: widget.upVote ? UniformColor : Colors.black,
                 ),
                 tooltip: 'Up vote',
                 iconSize: 30,
                 onPressed: () {
                   setState(() {
-                    if (upVote == true) {
+                    if (widget.upVote == true) {
                       widget.upCounter = 0;
                       widget.votes--;
-                      upVote = false;
+                     widget.upVote = false;
                     } else {
                       if (widget.downCounter == 1) {
                         widget.votes++;
                         widget.downCounter = 0;
                       }
-                      if (downVote == true) {
+                      if (widget.downVote == true) {
                         widget.votes++;
-                        downVote = false;
+                        widget.downVote = false;
                       }
                       widget.upCounter = 1;
                       widget.votes++;
-                      upVote = true;
+                      widget.upVote = true;
                     }
                     updateVotesNumber();
                   });
@@ -702,28 +791,28 @@ class _KCommentState extends State<KComment> {
               IconButton(
                 icon: Icon(
                   Icons.arrow_drop_down,
-                  color: downVote ? UniformColor : Colors.black,
+                  color: widget.downVote ? UniformColor : Colors.black,
                 ),
                 tooltip: 'Down vote',
                 iconSize: 30,
                 onPressed: () {
                   setState(() {
-                    if (downVote == true) {
+                    if (widget.downVote == true) {
                       widget.downCounter = 0;
                       widget.votes++;
-                      downVote = false;
+                      widget.downVote = false;
                     } else {
                       if (widget.upCounter == 1) {
                         widget.votes--;
                         widget.upCounter = 0;
                       }
-                      if (upVote == true) {
+                      if (widget.upVote == true) {
                         widget.votes--;
-                        upVote = false;
+                        widget.upVote = false;
                       }
                       widget.downCounter = 1;
                       widget.votes--;
-                      downVote = true;
+                      widget.downVote = true;
                     }
                     updateVotesNumber();
                   });

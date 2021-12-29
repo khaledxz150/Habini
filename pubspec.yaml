@@ -28,6 +28,7 @@ dependencies:
   readmore: ^2.0.0
   firebase_messaging: ^11.2.0
   overlay_support: ^1.0.5
+  flutter_local_notifications: ^9.1.5
 
 
 dev_dependencies:

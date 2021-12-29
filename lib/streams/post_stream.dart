@@ -58,7 +58,7 @@ class PostStreamer extends StatelessWidget {
             );
           } else if (!snapshot.hasData){
             return Center(
-              child: Text('No Data'),
+              child: CircularProgressIndicator(),
             );
           }
           return Center(

@@ -35,16 +35,7 @@ class WelcomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: KmaterialButton(
                       color: UniformColor,
-                      label: 'Login',
-                      onPressed: () {
-                        Navigator.pushNamed(context, 'sign_in_screen');
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: KmaterialButton(
-                      color: UniformColor,
-                      label: 'SignUp',
+                      label: 'Log In',
                       onPressed: () {
                         Navigator.pushNamed(
                             context, 'university_number_auth_screen');

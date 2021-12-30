@@ -131,7 +131,7 @@ class _State extends State<UniversityAuth> {
                               color: UniformColor,
                             ),
                             icon: Icon(
-                              Icons.account_circle,
+                              Icons.lock,
                               color: UniformColor,
                             ),
                             keyBordType: null,
@@ -148,7 +148,7 @@ class _State extends State<UniversityAuth> {
                           height: 10,
                         ),
                         KmaterialButton(
-                          label: 'Check',
+                          label: 'Next',
                           onPressed: () async {
                             UserData data = await studentData();
 

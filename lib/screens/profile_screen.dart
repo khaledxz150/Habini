@@ -55,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
           }
           var userDocument = snapshot.data;
           return CircleAvatar(
-            radius: 100,
+            radius: 90,
             backgroundImage: NetworkImage(
               userDocument["avatarUrl"],
             ),
@@ -75,8 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           onPressed: () {
             Navigator.of(context).pushNamedAndRemoveUntil(
-                'navigation_page',
-                    (Route<dynamic> route) => false);
+                'navigation_page', (Route<dynamic> route) => false);
           },
         ),
       ),
@@ -106,6 +105,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               getUserAvatar(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Text(
+                    'Top Post',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 40),
+                  ),
+                ),
+              ),
+
               PostStreamer(
                 logedInUser: logedInUser,
               ),
@@ -132,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
             visible: _isVisible,
             child: Padding(
               padding: const EdgeInsets.only(
-                  top: 300, bottom: 220, right: 20, left: 20),
+                  top: 300, bottom: 160, right: 20, left: 20),
               child: Container(
                 color: Colors.teal,
                 child: GridView.count(
@@ -238,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -259,4 +269,117 @@ class HeaderCurvedContainer extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+class TopRated extends StatefulWidget {
+  final poster;
+
+  final String content;
+  int votes = 0;
+  final date;
+  dynamic numberOfComments;
+
+  int downCounter = 0;
+  int upCounter = 0;
+
+  TopRated({
+    this.poster,
+    this.content,
+    this.votes,
+    this.date,
+    this.numberOfComments,
+  });
+
+  @override
+  _TopRatedState createState() => _TopRatedState();
+}
+
+class _TopRatedState extends State<TopRated> {
+  @override
+  bool downVote = false;
+  bool upVote = false;
+
+  getUserAvatar() {
+    return StreamBuilder(
+      stream: _firebase.collection('Users').doc(widget.poster).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        var userDocument = snapshot.data;
+        return CircleAvatar(
+          backgroundImage: NetworkImage(
+            userDocument["avatarUrl"],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.4),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 4), // changes position of shadow
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+      margin: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                child: getUserAvatar(),
+              ),
+              Text(timeAgo(widget.date.toDate())),
+            ],
+          ),
+          SizedBox(
+            height: 9,
+          ),
+          Opacity(
+            opacity: 0.5,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 1,
+                height: 0.5,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            padding: EdgeInsets.all(5.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.content,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 25,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+        ],
+      ),
+    );
+  }
 }

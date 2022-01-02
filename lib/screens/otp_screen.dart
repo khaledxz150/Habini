@@ -123,13 +123,13 @@ class _State extends State<OTPScreen> {
                         },
                       ),
                     ),
-                    KmaterialButton(
-                      label: 'Edit Phone Number',
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      color: UniformColor,
-                    ),
+                    // KmaterialButton(
+                    //   label: 'Edit Phone Number',
+                    //   onPressed: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   color: UniformColor,
+                    // ),
                   ],
                 ),
               ),

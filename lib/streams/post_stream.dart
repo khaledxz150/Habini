@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:habini/components.dart';
+import 'package:habini/screens/comments_screen.dart';
+import 'package:habini/screens/profile_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostStreamer extends StatelessWidget {
@@ -15,6 +17,52 @@ class PostStreamer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getTopRatedPost() {
+      return FutureBuilder(
+        future: _firebase
+            .collection('Posts').orderBy('votesNumber').limitToLast(1)
+            .where('poster', isEqualTo: logedInUser.uid)
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final posts = snapshot.data.docs.reversed;
+            var kPost;
+            for (var post in posts) {
+              final postData = post.data();
+              final content = postData['content'];
+              final numberOfComments = postData['numOfComments'];
+              final votes = postData['votesNumber'];
+              final date = postData['sentOn'];
+              final postId = postData['postId'];
+              final poster = postData['poster'];
+
+              final currentUser = logedInUser.uid;
+              bool meIs = false;
+              if (currentUser == poster) {
+                meIs = true;
+              }
+              kPost = KPostContainer(
+                isMe: true,
+                content: content,
+                numberOfComments: numberOfComments,
+                votes: votes,
+                date: date,
+                postId: postId,
+                poster: poster,
+              );
+            }
+            return kPost;
+          } else if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(
+            ),
+          );
+        },);
+    }
     return FutureBuilder(
         future: _firebase
             .collection('Posts').orderBy('votesNumber')
@@ -39,6 +87,7 @@ class PostStreamer extends StatelessWidget {
                 meIs = true;
               }
 
+
               final kPost = KPostContainer(
                 isMe: meIs,
                 content: content,
@@ -56,17 +105,19 @@ class PostStreamer extends StatelessWidget {
                 children: postsContainer,
               ),
             );
-          } else if (!snapshot.hasData){
+          } else if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
           return Center(
             child: CircularProgressIndicator(
-              backgroundColor: UniformColor,
+
             ),
           );
         });
   }
 
 }
+
+

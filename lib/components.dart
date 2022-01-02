@@ -12,6 +12,9 @@ import 'package:habini/screens/profile_screen.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
+String reportContent = null;
+final reportTextController = TextEditingController();
+final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
 
 User logedInUser;
 Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
@@ -379,9 +382,9 @@ class _KPostContainerState extends State<KPostContainer> {
                                           .collection('Comments')
                                           .get()
                                           .then(
-                                            (snapshot) {
+                                        (snapshot) {
                                           for (DocumentSnapshot ds
-                                          in snapshot.docs) {
+                                              in snapshot.docs) {
                                             ds.reference.delete();
                                           }
                                         },
@@ -576,7 +579,6 @@ class KComment extends StatefulWidget {
 
 class _KCommentState extends State<KComment> {
   @override
-
   bool isVoted;
 
   @override
@@ -701,6 +703,7 @@ class _KCommentState extends State<KComment> {
   }
 
   Widget build(BuildContext context) {
+    var dropDownValue;
     setState(() {
       getData();
     });
@@ -717,15 +720,139 @@ class _KCommentState extends State<KComment> {
                 child: getUserAvatar(),
               ),
               Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      timeAgo(
-                        widget.date.toDate(),
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    timeAgo(
+                      widget.date.toDate(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Container(
+                      width: 40,
+                      child: DropdownButton(
+                        value: dropDownValue,
+                        isExpanded: true,
+                        items: [
+                          'Delete','Report'
+                        ].map((String value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) async {
+                          setState(() {
+                            dropDownValue=newValue;
+                          });
+                          if (newValue == "Delete") {
+                            try {
+                              await _firebase
+                                  .collection('Posts')
+                                  .doc(widget.postId)
+                                  .collection('Comments')
+                                  .doc(widget.commentId)
+                                  .collection('Voters')
+                                  .get()
+                                  .then(
+                                    (snapshot) {
+                                  for (DocumentSnapshot ds
+                                  in snapshot.docs) {
+                                    ds.reference.delete();
+                                  }
+                                },
+                              );
+                              await _firebase
+                                  .collection('Posts')
+                                  .doc(widget.postId)
+                                  .collection('Comments')
+                                  .doc(widget.commentId)
+                                  .delete();
+                            } catch (e) {
+                              print(e);
+                            }
+                          }
+                          else if(newValue == "Report"){
+                            Alert(
+                              context: context,
+                              title: "Report",
+                              content: Column(
+                                children: <Widget>[
+                                  TextField(
+                                    decoration: InputDecoration(
+                                      icon: Icon(
+                                        Icons.warning,
+                                        color: UniformColor,
+                                      ),
+                                      labelText: 'Describe the problem',
+                                      labelStyle: TextStyle(
+                                        color: UniformColor,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: UniformColor, width: 1.0),
+                                      ),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        reportContent = value;
+                                      });
+                                    },
+                                    controller: reportTextController,
+                                  ),
+                                ],
+                              ),
+                              buttons: [
+                                DialogButton(
+                                  child: Text(
+                                    "Submit",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                  onPressed: () {
+                                    if (reportContent == null) {
+                                      print("is null");
+                                    } else {
+                                      reportTextController.clear();
+                                      try {
+                                        _firebase
+                                            .collection('CommentsReports')
+                                            .doc()
+                                            .set({
+                                          'Report': reportContent,
+                                          'Reporter': logedInUser.uid,
+                                          'sentOn':
+                                          FieldValue.serverTimestamp(),
+                                          'commentId': widget.postId,
+                                          'postId': widget.postId,
+                                        });
+
+                                        reportContent = null;
+                                      } catch (e) {
+                                        print(e);
+                                      }
+                                      FocusScope.of(context).unfocus();
+                                      _scaffoldkey.currentState.showSnackBar(
+                                        SnackBar(
+                                          content:
+                                          Text('Report Sent Successfully'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  width: 120,
+                                  color: UniformColor,
+                                )
+                              ],
+                            ).show();
+                          }
+                        },
                       ),
                     ),
-                    DropdownButton<FlatButton>()
-                  ]),
+                  ),
+                ],
+              ),
             ],
           ),
           SizedBox(
@@ -766,7 +893,7 @@ class _KCommentState extends State<KComment> {
                     if (widget.upVote == true) {
                       widget.upCounter = 0;
                       widget.votes--;
-                     widget.upVote = false;
+                      widget.upVote = false;
                     } else {
                       if (widget.downCounter == 1) {
                         widget.votes++;

@@ -173,19 +173,22 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
     }
 
     getVotes() {
-      try {
-        return new FutureBuilder(
-          future: _firebase.collection('Posts').doc(posts.postId).get(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return CircularProgressIndicator();
-            }
-            var userDocument = snapshot.data;
-            return new Text(userDocument["votesNumber"].toString());
-          },
-        );
-      } catch (e) {
-        print(e);
+      dynamic data =  _firebase.collection('Posts').doc(posts.postId).get();
+      if (data!= null){
+        try {
+          return new FutureBuilder(
+            future: data,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CircularProgressIndicator();
+              }
+              var userDocument = snapshot.data;
+              return new Text(userDocument["votesNumber"].toString());
+            },
+          );
+        } catch (e) {
+          print(e);
+        }
       }
     }
 
@@ -210,20 +213,24 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
       }
     }
 
-    getCommentsNumber() {
-      try {
-        return new FutureBuilder(
-          future: _firebase.collection('Posts').doc(posts.postId).get(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return CircularProgressIndicator();
-            }
-            var userDocument = snapshot.data;
-            return new Text(userDocument["numOfComments"].toString());
-          },
-        );
-      } catch (e) {
-        print(e);
+    getCommentsNumber()  {
+      dynamic data =  _firebase.collection('Posts').doc(posts.postId).get();
+      if (data == null) {
+      } else {
+        try {
+          return new FutureBuilder(
+            future: data,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CircularProgressIndicator();
+              }
+              var userDocument = snapshot.data;
+              return new Text(userDocument["numOfComments"].toString());
+            },
+          );
+        } catch (e) {
+          print(e);
+        }
       }
     }
 

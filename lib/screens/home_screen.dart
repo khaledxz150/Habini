@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:habini/widgets/post_widget.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+final _firebase = FirebaseFirestore.instance;
 User logedInUser;
 FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
@@ -31,6 +32,7 @@ class HomeIndexState extends State<HomeIndex> {
   bool meIs = false;
 
   TextEditingController _searchController = TextEditingController();
+
   void didChangeDependencies() {
     super.didChangeDependencies();
     resultsLoaded = getPosts();
@@ -42,7 +44,10 @@ class HomeIndexState extends State<HomeIndex> {
   }
 
   getPosts() async {
-    var data = await _fireStore.collection('Posts').orderBy('sentOn', descending: true).get();
+    var data = await _fireStore
+        .collection('Posts')
+        .orderBy('sentOn', descending: true)
+        .get();
     setState(() {
       _allResults = data.docs;
       isLoad = false;
@@ -74,6 +79,7 @@ class HomeIndexState extends State<HomeIndex> {
     getCurrentUser();
     _searchController.addListener(_onSearchChanged);
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -96,6 +102,29 @@ class HomeIndexState extends State<HomeIndex> {
 
   @override
   Widget build(BuildContext context) {
+    checkPostDuration(index) {
+      final posts = Posts.fromSnapshot(_resultsList[index]);
+      Timestamp sentOn = posts.date;
+      DateTime sentOnTo = sentOn.toDate();
+      int sentOnHours = sentOnTo.hour;
+      var duration = posts.duration;
+      var currentTime = new DateTime.now().hour;
+      // print(posts.content);
+      // print(sentOnHours);
+      // print("sentOn");
+      // print(duration);
+      // print("duration");
+      // print(currentTime - sentOnHours);
+      // print("deleteTime");
+      // print(currentTime);
+      // print("current");
+      if (currentTime - sentOnHours >= duration) {
+        _resultsList.removeAt(index);
+
+        _firebase.collection('Posts').doc(posts.postId).delete();
+      }
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -164,7 +193,7 @@ class HomeIndexState extends State<HomeIndex> {
               Expanded(
                 flex: 1,
                 child: RefreshIndicator(
-                  onRefresh: refresh ,
+                  onRefresh: refresh,
                   child: ListView.builder(
                     itemCount: _resultsList.length,
                     itemBuilder: (BuildContext context, index) {
@@ -172,14 +201,22 @@ class HomeIndexState extends State<HomeIndex> {
                       if (logedInUser.uid == posts.poster) {
                         meIs = true;
                       }
-                     try{
-                       return KPostContainerV2(
-                         isMe:meIs,
-                         document: _resultsList[index],
-                       );
-                     }catch(e){
+                      if (_resultsList.isEmpty) {
+                        return Center(
+                          child: Container(
+                            child: Text('There is no posts yet :('),
+                          ),
+                        );
+                      }
+                      try {
+                        checkPostDuration(index);
+                        return KPostContainerV2(
+                          isMe: meIs,
+                          document: _resultsList[index],
+                        );
+                      } catch (e) {
                         return CircularProgressIndicator();
-                     }
+                      }
                     },
                   ),
                 ),
@@ -190,9 +227,8 @@ class HomeIndexState extends State<HomeIndex> {
       ),
     );
   }
+
   Future<void> refresh() {
     return getPosts();
   }
 }
-
-

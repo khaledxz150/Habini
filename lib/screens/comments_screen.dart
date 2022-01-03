@@ -93,6 +93,15 @@ class _CommentsScreenState extends State<CommentsScreen> {
   }
 
   Widget build(BuildContext context) {
+    storeNotificationComments(){
+      _firebase.collection('Notifications').doc().set({
+        'to': widget.poster,
+        'from': logedInUser.uid,
+        'postId':widget.postId,
+        'sentOn': FieldValue.serverTimestamp(),
+        'content':'Someone Commented on your post',
+      });
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       // backgroundColor: Color.fromRGBO(60, 174, 163, 0),
@@ -180,8 +189,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       if (commentContent == null ||
                           commentContent.trim() == "") {
                       } else {
+                        storeNotificationComments();
                         commentTextController.clear();
-
                         String id = _firebase
                             .collection('Posts')
                             .doc(widget.postId)
@@ -201,6 +210,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             'votesNumber': commentVotes,
                             'commentId': id,
                             'postId': widget.postId,
+                            'poster':widget.poster,
                           });
                           commentContent = null;
                         } catch (ex) {

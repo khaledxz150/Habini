@@ -8,7 +8,7 @@ class Posts {
   String id;
   final postId;
   final poster;
-
+  final duration;
 
   Posts({
     this.postId,
@@ -18,6 +18,7 @@ class Posts {
     this.poster,
     this.date,
     this.votesNumber,
+    this.duration,
   });
 
   Posts.fromSnapshot(DocumentSnapshot snapshot)
@@ -26,7 +27,6 @@ class Posts {
         votesNumber = snapshot['votesNumber'],
         date = snapshot['sentOn'],
         postId = snapshot['postId'],
+        duration = snapshot['duration'],
         poster = snapshot['poster'];
-
 }
-

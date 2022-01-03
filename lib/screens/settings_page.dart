@@ -45,23 +45,13 @@ class _SettingScreenState extends State<SettingScreen> {
                 },
               ),
               SettingsTile(
-                title: 'Change phone number',
-                leading: Icon(Icons.phone),
-                onPressed: (BuildContext context) {},
-              ),
-              SettingsTile(
-                title: 'Change faculty',
-                leading: Icon(Icons.apartment),
-                onPressed: (BuildContext context) {},
-              ),
-              SettingsTile.switchTile(
-                  title: 'Dark mode',
-                  leading: Icon(Icons.nights_stay),
-                  switchValue: false,
-                  onToggle: (bool value) {}),
-              SettingsTile(
                 title: 'Contact us',
                 leading: Icon(Icons.contact_mail_outlined),
+                onPressed: (BuildContext context) {},
+              ),
+              SettingsTile(
+                title: 'FAQ',
+                leading: Icon(Icons.question_answer),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile(

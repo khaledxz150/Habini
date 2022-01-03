@@ -159,6 +159,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
         'to': posts.poster,
         'from': logedInUser.uid,
         'sentOn': FieldValue.serverTimestamp(),
+        'postId':posts.postId,
         'content':'Someone up voted your post',
       });
     }
@@ -167,10 +168,10 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
         'to': posts.poster,
         'from': logedInUser.uid,
         'sentOn': FieldValue.serverTimestamp(),
+        'postId':posts.postId,
         'content':'Someone Down voted your post',
       });
     }
-
     getVotes() {
       try {
         return new FutureBuilder(
@@ -261,6 +262,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Raleway',
+                          color:Colors.red,
                         ),
                       ),
                     ),

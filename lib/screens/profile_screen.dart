@@ -105,16 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               getUserAvatar(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: Text(
-                    'Top Post',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 40),
-                  ),
-                ),
-              ),
+
 
               PostStreamer(
                 logedInUser: logedInUser,

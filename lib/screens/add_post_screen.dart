@@ -25,7 +25,7 @@ class AddPost extends StatefulWidget {
 
 class _AddPostState extends State<AddPost> {
   @override
-  int _defaultPostTime = 24;
+  int _defaultPostTime = 1;
   String _postContent = null;
   int numberOfComments = 0;
   int numberOfVotes = 0;

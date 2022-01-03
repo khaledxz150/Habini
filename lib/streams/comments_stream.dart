@@ -10,6 +10,7 @@ class CommentsStreamer extends StatelessWidget {
     this.logedInUser,
     this.currentPostId,
   });
+
   final User logedInUser;
   final currentPostId;
 
@@ -23,10 +24,9 @@ class CommentsStreamer extends StatelessWidget {
             .orderBy('sentOn')
             .snapshots(),
         builder: (context, snapshot) {
-         if (snapshot.hasData==false)
-           {
-             return CircularProgressIndicator();
-           }
+          if (snapshot.hasData == false) {
+            return CircularProgressIndicator();
+          }
           if (snapshot.hasData) {
             final comments = snapshot.data.docs.reversed;
             List<KComment> commentsContainer = [];
@@ -35,19 +35,21 @@ class CommentsStreamer extends StatelessWidget {
               final content = commentData['content'];
               final votes = commentData['votesNumber'];
               final date = commentData['sentOn'];
-              final commentId=commentData['commentId'];
+              final commentId = commentData['commentId'];
               final postId = commentData['postId'];
               final commenter = commentData['commenter'];
+              final poster = commentData['poster'];
 
               final kPost = KComment(
-                downVote:false,
-                upVote:false ,
+                downVote: false,
+                upVote: false,
                 content: content,
                 votes: votes,
                 date: date,
-                commentId:commentId ,
-                postId:postId,
-                commenter:commenter,
+                commentId: commentId,
+                postId: postId,
+                commenter: commenter,
+                poster: poster,
               );
               commentsContainer.add(kPost);
             }
@@ -56,7 +58,7 @@ class CommentsStreamer extends StatelessWidget {
               children: commentsContainer,
             );
           }
-            return CircularProgressIndicator();
+          return CircularProgressIndicator();
         });
   }
 }

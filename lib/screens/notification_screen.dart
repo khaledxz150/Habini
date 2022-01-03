@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habini/streams/notifiacations_stream.dart';
+
 import '../components.dart';
 
+Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 final _auth = FirebaseAuth.instance;
 final _firebase = FirebaseFirestore.instance;
 User logedInUser;

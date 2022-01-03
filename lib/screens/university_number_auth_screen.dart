@@ -57,13 +57,6 @@ class _State extends State<UniversityAuth> {
       if (response.statusCode == 200) {
         String responseString = response.body;
         return userDataFromJson(responseString);
-      } else {
-        FocusScope.of(context).unfocus();
-        _scaffoldkey.currentState.showSnackBar(
-          SnackBar(
-            content: Text('Error Try again later'),
-          ),
-        );
       }
     }
 

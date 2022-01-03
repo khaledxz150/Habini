@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:habini/components.dart';
+import 'package:habini/screens/comments_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:google_fonts/google_fonts.dart';
 
+Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
+
 class NotificationStream extends StatelessWidget {
   final _firebase = FirebaseFirestore.instance;
+
 
   NotificationStream({
     this.logedInUser,
@@ -16,6 +20,26 @@ class NotificationStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var contentPost;
+    var numberOfComments;
+    var votesPost;
+    var date;
+    var poster;
+    getPostData(postId)async {
+      var collection = _firebase.collection('Posts');
+      var docSnapshot = await collection.doc(postId).get();
+      if (docSnapshot.exists) {
+        Map<String, dynamic> data = docSnapshot.data();
+        contentPost = data['content'];
+        numberOfComments = data['numOfComments'];
+        votesPost = data['votesNumber'];
+        date = data['sentOn'];
+        poster = data['poster'];
+
+      }
+      print(contentPost);
+    }
+
     return StreamBuilder(
         stream: _firebase
             .collection('Notifications')
@@ -24,13 +48,14 @@ class NotificationStream extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final notifications = snapshot.data.docs.reversed;
-            List<Container> notificationContainer = [];
+            List<FlatButton> notificationContainer = [];
             for (var notification in notifications) {
               final notificationData = notification.data();
               final currentUser = logedInUser.uid;
               final content = notificationData['content'];
               final sentOn = notificationData['sentOn'];
               final from = notificationData['from'];
+              final postId = notificationData['postId'];
 
               getUserAvatar() {
                 try {
@@ -53,48 +78,66 @@ class NotificationStream extends StatelessWidget {
                   print(e);
                 }
               }
-
-              final kNotification = Container(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    getUserAvatar(),
-                    FlatButton(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              child: Text(
-                                content,
-                                style: GoogleFonts.koHo(
-                                  fontSize: 20,
-                                  color: Colors.black,
+              getPostData(postId);
+              final kNotification = FlatButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CommentsScreen(
+                        postId: postId,
+                        postContent:contentPost,
+                        postVotes: votesPost,
+                        numberOfComments: numberOfComments,
+                        date:date,
+                        poster: poster,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      getUserAvatar(),
+                      FlatButton(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Text(
+                                  content,
+                                  style: GoogleFonts.koHo(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              timeAgo(sentOn.toDate()),
-                              style: GoogleFonts.koHo(
-                                fontSize: 15,
-                                color: Colors.black,
-                              ),
+                            SizedBox(
+                              height: 5,
                             ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                timeAgo(sentOn.toDate()),
+                                style: GoogleFonts.koHo(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               );
               notificationContainer.add(kNotification);

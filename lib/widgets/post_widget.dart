@@ -173,14 +173,16 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
     }
 
     getVotes() {
-      dynamic data =  _firebase.collection('Posts').doc(posts.postId).get();
-      if (data!= null){
+      dynamic data = _firebase.collection('Posts').doc(posts.postId).get();
+      if (data != null) {
         try {
           return new FutureBuilder(
             future: data,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Center(child: Text(snapshot.error.toString()));
               }
               var userDocument = snapshot.data;
               return new Text(userDocument["votesNumber"].toString());
@@ -213,8 +215,8 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
       }
     }
 
-    getCommentsNumber()  {
-      dynamic data =  _firebase.collection('Posts').doc(posts.postId).get();
+    getCommentsNumber() {
+      dynamic data = _firebase.collection('Posts').doc(posts.postId).get();
       if (data == null) {
       } else {
         try {
@@ -224,8 +226,19 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();
               }
+              else if (snapshot.hasError) {
+                return Center(child: Text(snapshot.error.toString()));
+              }
               var userDocument = snapshot.data;
-              return new Text(userDocument["numOfComments"].toString());
+              String result;
+              if (userDocument["numOfComments"].toString()==null){
+                result = "";
+              }
+              else
+                {
+                  result = userDocument["numOfComments"].toString();
+                }
+              return new Text(result);
             },
           );
         } catch (e) {
@@ -684,7 +697,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                               storeNotificationUpVote();
                             },
                           ),
-                          getVotes(),
+                          // getVotes(),
                           IconButton(
                             icon: Icon(
                               Icons.arrow_drop_down,

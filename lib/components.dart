@@ -362,6 +362,17 @@ class _KPostContainerState extends State<KPostContainer> {
                                         color: Colors.white, fontSize: 20),
                                   ),
                                   onPressed: () async {
+                                    await _firebase
+                                        .collection('Notifications').where('postId',isEqualTo: widget.postId)
+                                        .get()
+                                        .then(
+                                            (snapshot) {
+                                          for (DocumentSnapshot ds
+                                          in snapshot.docs) {
+                                            ds.reference.delete();
+                                          }
+                                        });
+
                                     try {
                                       await _firebase
                                           .collection('Posts')
@@ -709,7 +720,7 @@ class _KCommentState extends State<KComment> {
     setState(() {
       getData();
     });
-    if (logedInUser.uid == widget.poster&&widget.poster==widget.commenter) {
+    if (logedInUser.uid == widget.poster && widget.poster == widget.commenter) {
       return Container(
         padding: EdgeInsets.all(10),
         color: Colors.grey[200],
@@ -729,11 +740,287 @@ class _KCommentState extends State<KComment> {
                       child: Text(
                         'Me',
                         style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Raleway',
-                          color: Colors.red
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Raleway',
+                            color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      timeAgo(
+                        widget.date.toDate(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Container(
+                        width: 40,
+                        child: DropdownButton(
+                          value: dropDownValue,
+                          isExpanded: true,
+                          items: ['Delete', 'Report'].map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) async {
+                            setState(() {
+                              dropDownValue = newValue;
+                            });
+                            if (newValue == "Delete") {
+                              await _firebase
+                                  .collection('Notifications').where('postId',isEqualTo: widget.postId)
+                                  .get()
+                                  .then(
+                                      (snapshot) {
+                                    for (DocumentSnapshot ds
+                                    in snapshot.docs) {
+                                      ds.reference.delete();
+                                    }
+                                  });
+                              try {
+                                await _firebase
+                                    .collection('Posts')
+                                    .doc(widget.postId)
+                                    .collection('Comments')
+                                    .doc(widget.commentId)
+                                    .collection('Voters')
+                                    .get()
+                                    .then(
+                                  (snapshot) {
+                                    for (DocumentSnapshot ds in snapshot.docs) {
+                                      ds.reference.delete();
+                                    }
+                                  },
+                                );
+                                await _firebase
+                                    .collection('Posts')
+                                    .doc(widget.postId)
+                                    .collection('Comments')
+                                    .doc(widget.commentId)
+                                    .delete();
+                              } catch (e) {
+                                print(e);
+                              }
+                            } else if (newValue == "Report") {
+                              Alert(
+                                context: context,
+                                title: "Report",
+                                content: Column(
+                                  children: <Widget>[
+                                    TextField(
+                                      decoration: InputDecoration(
+                                        icon: Icon(
+                                          Icons.warning,
+                                          color: UniformColor,
+                                        ),
+                                        labelText: 'Describe the problem',
+                                        labelStyle: TextStyle(
+                                          color: UniformColor,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: UniformColor, width: 1.0),
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          reportContent = value;
+                                        });
+                                      },
+                                      controller: reportTextController,
+                                    ),
+                                  ],
+                                ),
+                                buttons: [
+                                  DialogButton(
+                                    child: Text(
+                                      "Submit",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                    onPressed: () {
+                                      if (reportContent == null) {
+                                        print("is null");
+                                      } else {
+                                        reportTextController.clear();
+                                        try {
+                                          _firebase
+                                              .collection('CommentsReports')
+                                              .doc()
+                                              .set({
+                                            'Report': reportContent,
+                                            'Reporter': logedInUser.uid,
+                                            'sentOn':
+                                                FieldValue.serverTimestamp(),
+                                            'commentId': widget.postId,
+                                            'postId': widget.postId,
+                                          });
+
+                                          reportContent = null;
+                                        } catch (e) {
+                                          print(e);
+                                        }
+                                        FocusScope.of(context).unfocus();
+                                        _scaffoldkey.currentState.showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                'Report Sent Successfully'),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    width: 120,
+                                    color: UniformColor,
+                                  )
+                                ],
+                              ).show();
+                            }
+                          },
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        widget.content,
+                        style: TextStyle(fontSize: 15),
+                        softWrap: true,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_drop_up,
+                    color: widget.upVote ? UniformColor : Colors.black,
+                  ),
+                  tooltip: 'Up vote',
+                  iconSize: 30,
+                  onPressed: () {
+                    setState(() {
+                      if (widget.upVote == true) {
+                        widget.upCounter = 0;
+                        widget.votes--;
+                        widget.upVote = false;
+                      } else {
+                        if (widget.downCounter == 1) {
+                          widget.votes++;
+                          widget.downCounter = 0;
+                        }
+                        if (widget.downVote == true) {
+                          widget.votes++;
+                          widget.downVote = false;
+                        }
+                        widget.upCounter = 1;
+                        widget.votes++;
+                        widget.upVote = true;
+                      }
+                      updateVotesNumber();
+                    });
+                    saveVoter();
+                  },
+                ),
+                Text(
+                  widget.votes.toString(),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    color: widget.downVote ? UniformColor : Colors.black,
+                  ),
+                  tooltip: 'Down vote',
+                  iconSize: 30,
+                  onPressed: () {
+                    setState(() {
+                      if (widget.downVote == true) {
+                        widget.downCounter = 0;
+                        widget.votes++;
+                        widget.downVote = false;
+                      } else {
+                        if (widget.upCounter == 1) {
+                          widget.votes--;
+                          widget.upCounter = 0;
+                        }
+                        if (widget.upVote == true) {
+                          widget.votes--;
+                          widget.upVote = false;
+                        }
+                        widget.downCounter = 1;
+                        widget.votes--;
+                        widget.downVote = true;
+                      }
+                      updateVotesNumber();
+                    });
+                    saveVoter();
+                  },
+                ),
+              ],
+            ),
+            Opacity(
+              opacity: 0.5,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 1,
+                  height: 1,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (logedInUser.uid == widget.commenter) {
+      return Container(
+        padding: EdgeInsets.all(10),
+        color: Colors.grey[200],
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                      child: getUserAvatar(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, top: 6),
+                      child: Text(
+                        'Me',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Raleway',
+                            color: Colors.red),
                       ),
                     ),
                   ],
@@ -977,8 +1264,8 @@ class _KCommentState extends State<KComment> {
           ],
         ),
       );
-    }
-    else if(logedInUser.uid == widget.commenter){
+    } else if (logedInUser.uid == widget.poster &&
+        widget.poster != widget.commenter) {
       return Container(
         padding: EdgeInsets.all(10),
         color: Colors.grey[200],
@@ -987,25 +1274,9 @@ class _KCommentState extends State<KComment> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                      child: getUserAvatar(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12, top: 6),
-                      child: Text(
-                        'Me',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Raleway',
-                            color: Colors.red
-                        ),
-                      ),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                  child: getUserAvatar(),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -1042,7 +1313,7 @@ class _KCommentState extends State<KComment> {
                                     .collection('Voters')
                                     .get()
                                     .then(
-                                      (snapshot) {
+                                  (snapshot) {
                                     for (DocumentSnapshot ds in snapshot.docs) {
                                       ds.reference.delete();
                                     }
@@ -1107,7 +1378,7 @@ class _KCommentState extends State<KComment> {
                                             'Report': reportContent,
                                             'Reporter': logedInUser.uid,
                                             'sentOn':
-                                            FieldValue.serverTimestamp(),
+                                                FieldValue.serverTimestamp(),
                                             'commentId': widget.postId,
                                             'postId': widget.postId,
                                           });
@@ -1246,7 +1517,7 @@ class _KCommentState extends State<KComment> {
           ],
         ),
       );
-    } else if (logedInUser.uid == widget.poster&&widget.poster!=widget.commenter){
+    } else {
       return Container(
         padding: EdgeInsets.all(10),
         color: Colors.grey[200],
@@ -1274,7 +1545,7 @@ class _KCommentState extends State<KComment> {
                         child: DropdownButton(
                           value: dropDownValue,
                           isExpanded: true,
-                          items: ['Delete', 'Report'].map((String value) {
+                          items: ['Report'].map((String value) {
                             return DropdownMenuItem(
                               value: value,
                               child: Text(value),
@@ -1284,32 +1555,7 @@ class _KCommentState extends State<KComment> {
                             setState(() {
                               dropDownValue = newValue;
                             });
-                            if (newValue == "Delete") {
-                              try {
-                                await _firebase
-                                    .collection('Posts')
-                                    .doc(widget.postId)
-                                    .collection('Comments')
-                                    .doc(widget.commentId)
-                                    .collection('Voters')
-                                    .get()
-                                    .then(
-                                      (snapshot) {
-                                    for (DocumentSnapshot ds in snapshot.docs) {
-                                      ds.reference.delete();
-                                    }
-                                  },
-                                );
-                                await _firebase
-                                    .collection('Posts')
-                                    .doc(widget.postId)
-                                    .collection('Comments')
-                                    .doc(widget.commentId)
-                                    .delete();
-                              } catch (e) {
-                                print(e);
-                              }
-                            } else if (newValue == "Report") {
+                            if (newValue == "Report") {
                               Alert(
                                 context: context,
                                 title: "Report",
@@ -1359,7 +1605,7 @@ class _KCommentState extends State<KComment> {
                                             'Report': reportContent,
                                             'Reporter': logedInUser.uid,
                                             'sentOn':
-                                            FieldValue.serverTimestamp(),
+                                                FieldValue.serverTimestamp(),
                                             'commentId': widget.postId,
                                             'postId': widget.postId,
                                           });

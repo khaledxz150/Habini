@@ -44,7 +44,6 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
     getVotes();
   }
 
-
   getData() async {
     DocumentSnapshot votes = await _firebase
         .collection('Posts')
@@ -67,7 +66,6 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
       votes = votesData['votesNumber'];
     });
   }
-
 
   void getCurrentUser() {
     try {
@@ -154,24 +152,26 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
     getData();
     final posts = Posts.fromSnapshot(widget.document);
 
-    storeNotificationUpVote(){
+    storeNotificationUpVote() {
       _firebase.collection('Notifications').doc().set({
         'to': posts.poster,
         'from': logedInUser.uid,
         'sentOn': FieldValue.serverTimestamp(),
-        'postId':posts.postId,
-        'content':'Someone up voted your post',
+        'postId': posts.postId,
+        'content': 'Someone up voted your post',
       });
     }
-    storeNotificationDownVote(){
+
+    storeNotificationDownVote() {
       _firebase.collection('Notifications').doc().set({
         'to': posts.poster,
         'from': logedInUser.uid,
         'sentOn': FieldValue.serverTimestamp(),
-        'postId':posts.postId,
-        'content':'Someone Down voted your post',
+        'postId': posts.postId,
+        'content': 'Someone Down voted your post',
       });
     }
+
     getVotes() {
       try {
         return new FutureBuilder(
@@ -262,7 +262,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Raleway',
-                          color:Colors.red,
+                          color: Colors.red,
                         ),
                       ),
                     ),
@@ -417,7 +417,6 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                                 updateVotesNumber();
                               });
                               saveVoter();
-
                             },
                           ),
                           getVotes(),
@@ -463,20 +462,19 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                         tooltip: 'Comment',
                         iconSize: 28,
                         onPressed: () {
-                          setState(() {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CommentsScreen(
-                                  postId: posts.postId,
-                                  postContent: posts.content,
-                                  postVotes: votes,
-                                  numberOfComments: posts.numberOfComments,
-                                  date: posts.date,
-                                  poster: posts.poster,
-                                ),
+                          Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                              builder: (context) => new CommentsScreen(
+                                postId: posts.postId,
+                                postContent: posts.content,
+                                postVotes: votes,
+                                numberOfComments: posts.numberOfComments,
+                                date: posts.date,
+                                poster: posts.poster,
                               ),
-                            );
-                          });
+                            ),
+                          );
                         },
                       ),
                       getCommentsNumber(),
@@ -598,7 +596,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                                       _scaffoldkey.currentState.showSnackBar(
                                         SnackBar(
                                           content:
-                                          Text('Report Sent Successfully'),
+                                              Text('Report Sent Successfully'),
                                         ),
                                       );
                                     }

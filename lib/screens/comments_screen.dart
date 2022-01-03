@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:habini/components.dart';
 import 'package:habini/streams/comments_stream.dart';
@@ -9,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:habini/screens/add_post_screen.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'navigation_page.dart';
 import 'save_user_data.dart';
 
 final _auth = FirebaseAuth.instance;
@@ -93,15 +93,16 @@ class _CommentsScreenState extends State<CommentsScreen> {
   }
 
   Widget build(BuildContext context) {
-    storeNotificationComments(){
+    storeNotificationComments() {
       _firebase.collection('Notifications').doc().set({
         'to': widget.poster,
         'from': logedInUser.uid,
-        'postId':widget.postId,
+        'postId': widget.postId,
         'sentOn': FieldValue.serverTimestamp(),
-        'content':'Someone Commented on your post',
+        'content': 'Someone Commented on your post',
       });
     }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       // backgroundColor: Color.fromRGBO(60, 174, 163, 0),
@@ -142,6 +143,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
             content: widget.postContent.toString(),
             numberOfComments: widget.numberOfComments,
             votes: widget.postVotes,
+            postId: widget.postId,
           ),
           SizedBox(
             height: 10,
@@ -210,7 +212,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             'votesNumber': commentVotes,
                             'commentId': id,
                             'postId': widget.postId,
-                            'poster':widget.poster,
+                            'poster': widget.poster,
                           });
                           commentContent = null;
                         } catch (ex) {
@@ -278,21 +280,24 @@ class _CommentsScreenState extends State<CommentsScreen> {
 }
 
 class CurrentPost extends StatefulWidget {
-  final poster;
-
   final String content;
   int votes = 0;
   final date;
-  dynamic numberOfComments = NumberOfComments;
+  int numberOfComments = 0;
   int downCounter = 0;
   int upCounter = 0;
+  final postId;
+  final bool isMe;
+  final poster;
 
   CurrentPost({
-    this.poster,
+    this.isMe,
+    this.postId,
     this.content,
     this.votes,
     this.date,
     this.numberOfComments,
+    this.poster,
   });
 
   @override
@@ -303,6 +308,131 @@ class _CurrentPostState extends State<CurrentPost> {
   @override
   bool downVote = false;
   bool upVote = false;
+  String reportContent = null;
+  bool isVoted;
+
+  bool showSpinner = false;
+  final _firebase = FirebaseFirestore.instance;
+  User logedInUser;
+
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
+
+  final reportTextController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentUser();
+    getData();
+    checkIfLikedOrNot();
+  }
+
+  getData() async {
+    DocumentSnapshot votes = await _firebase
+        .collection('Posts')
+        .doc(widget.postId)
+        .collection('Voters')
+        .doc(logedInUser.uid)
+        .get();
+    setState(() {
+      downVote = votes['downVote'];
+      upVote = votes['upVote'];
+    });
+  }
+
+  checkIfLikedOrNot() async {
+    DocumentSnapshot ds = await _firebase
+        .collection("Posts")
+        .doc(widget.postId)
+        .collection('Voters')
+        .doc(logedInUser.uid)
+        .get();
+    setState(() {
+      isVoted = ds.exists;
+    });
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        logedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void updateVotesNumber() {
+    setState(() {
+      _firebase
+          .collection('Posts')
+          .doc(widget.postId)
+          .update({'votesNumber': widget.votes});
+    });
+  }
+
+  void saveVoter() {
+    if (logedInUser == null) {
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "Login Alert",
+        desc: "Please Login First",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "close",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            width: 120,
+          )
+        ],
+      ).show();
+    } else {
+      try {
+        _firebase
+            .collection('Posts')
+            .doc(widget.postId)
+            .collection('Voters')
+            .doc(logedInUser.uid)
+            .set({
+          'downVote': downVote,
+          'upVote': upVote,
+          'sentOn': FieldValue.serverTimestamp(),
+        });
+      } catch (ex) {
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: "Connection error",
+          desc: "Please check your internet connection",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Back",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            ),
+          ],
+        ).show();
+      }
+    }
+    if (upVote == false && downVote == false) {
+      _firebase
+          .collection('Posts')
+          .doc(widget.postId)
+          .collection('Voters')
+          .doc(logedInUser.uid)
+          .delete();
+    }
+  }
 
   getUserAvatar() {
     return StreamBuilder(
@@ -323,6 +453,7 @@ class _CurrentPostState extends State<CurrentPost> {
 
   @override
   Widget build(BuildContext context) {
+    getData();
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -343,15 +474,36 @@ class _CurrentPostState extends State<CurrentPost> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                child: getUserAvatar(),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                    child: getUserAvatar(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, top: 6),
+                    child: Text(
+                      'Me',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Text(timeAgo(widget.date.toDate())),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    timeAgo(widget.date.toDate()),
+                  ),
+                ],
+              ),
             ],
           ),
           SizedBox(
-            height: 9,
+            height: 15,
           ),
           Opacity(
             opacity: 0.5,
@@ -372,14 +524,60 @@ class _CurrentPostState extends State<CurrentPost> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                widget.content,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+                widget.content,style: TextStyle(fontSize: 20),
               ),
             ),
           ),
-          SizedBox(
-            height: 15,
-          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_drop_up,
+                            color: upVote ? UniformColor : Colors.grey,
+                          ),
+                          tooltip: 'Up vote',
+                          iconSize: 30,
+                        ),
+                        Text(
+                          widget.votes.toString(),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: downVote ? UniformColor : Colors.grey,
+                          ),
+                          tooltip: 'Down vote',
+                          iconSize: 30,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 12.0, bottom: 3.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.comment),
+                      tooltip: 'Comment',
+                      iconSize: 28,
+                    ),
+                    Text(
+                      widget.numberOfComments.toString(),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

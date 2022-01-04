@@ -235,6 +235,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       icon: Image.network(
                           'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fe70b1333850498.56ba69ac32ae3.png?alt=media&token=dbe1ea6a-59da-4917-ba8a-c053bbe877ed'),
                     ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          updateUserAvatar(
+                              'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fweb_hi_res_512.png?alt=media&token=07cfcead-28a4-400e-81c6-6c879139d26b');
+                          _isVisible = false;
+                        });
+                      },
+                      icon: Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fweb_hi_res_512.png?alt=media&token=07cfcead-28a4-400e-81c6-6c879139d26b'),
+                    ),
                   ],
                 ),
               ),

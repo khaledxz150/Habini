@@ -36,6 +36,7 @@ class _SettingScreenState extends State<SettingScreen> {
       body: SettingsList(
         sections: [
           SettingsSection(
+            
             tiles: [
               SettingsTile(
                 title: 'Profile ',
@@ -52,11 +53,6 @@ class _SettingScreenState extends State<SettingScreen> {
               SettingsTile(
                 title: 'FAQ',
                 leading: Icon(Icons.question_answer),
-                onPressed: (BuildContext context) {},
-              ),
-              SettingsTile(
-                title: 'Delete Account',
-                leading: Icon(Icons.block_flipped),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile(

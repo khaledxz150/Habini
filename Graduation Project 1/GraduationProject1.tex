@@ -227,13 +227,11 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item Enter OTP
 \item Click "Log in"
 \end{enumerate}
-\subsubsection*{Sign up}
+\subsubsection*{bad scenario}
 \begin{enumerate}
-\itemsep0em 
-\item Enter University ID
-\item Enter Phone number
-\item Enter OTP
-\item Click "Sign in"
+\itemsep0em
+\item Wrong university ID or wrong password
+\item error message
 
 \end{enumerate}
 \subsubsection*{Post}
@@ -242,6 +240,12 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item Enter content
 \item Set duration
 \end{enumerate} 
+\subsubsection*{bad scenario}
+\begin{enumerate}
+\itemsep0em 
+\item  Post is empty
+\item  error message
+\end{enumerate} 
 \subsubsection*{Comment}
 \begin{enumerate}
 \itemsep0em 
@@ -249,12 +253,24 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item Press comment Icon
 \item Enter content
 \end{enumerate} 
+\subsubsection*{bad scenario}
+\begin{enumerate}
+\itemsep0em 
+\item no content written
+\item nothing will be posted
+\end{enumerate} 
 \subsubsection*{Report}
 \begin{enumerate}
 \itemsep0em 
 \item Click arrow to open list on post
 \item Add report content
 \item Click "Report"
+\end{enumerate} 
+\subsubsection*{Bad scenario}
+\begin{enumerate}
+\itemsep0em 
+\item empty report
+\item error message
 \end{enumerate} 
 \subsubsection*{Upvote-Downvote}
 \begin{enumerate}
@@ -268,31 +284,6 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item Click on "Settings"
 \item Click "Profile"
 \end{enumerate} 
-\subsubsection*{Delete account}
-\begin{enumerate}
-\itemsep0em 
-\item Click on "Settings"
-\item Click "Delete account"
-\item Confirm Identity with OTP
-\item Confirm delete
-\end{enumerate} 
-\subsubsection*{Change phone Number}
-\begin{enumerate}
-\itemsep0em 
-\item Click on "Settings"
-\item Click "Change phone"
-\item Confirm Identity with OTP on old number
-\item Enter new phone
-\item Confirm Identity with OTP on new number
-\end{enumerate}
-\subsubsection*{Change location}
-\begin{enumerate}
-\itemsep0em 
-\item Click on "Settings"
-\item Click "Location"
-\item Choose "A Facility
-\item Click "Change"
-\end{enumerate}
 \subsubsection*{Sign out}
 \begin{enumerate}
 \itemsep0em 
@@ -453,7 +444,7 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
   \caption{after pressing log-out}
   \end{figure}
   
-  \onecolumn
+  
   \clearpage
 \section{Software Architecture}
 {\includegraphics[width=1.1\textwidth]{./SoftwareArch/SoftwareArch.PNG}}
@@ -504,7 +495,6 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
  
  \end{table}
  \clearpage	
- \onecolumn
 \section{ Conclusion and Results}
 \subsection{Summary of accomplished project}
 \subsection{Future Work}

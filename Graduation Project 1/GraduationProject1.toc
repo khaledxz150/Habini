@@ -25,8 +25,8 @@
 \contentsline {subsubsection}{\numberline {5.3.2}Post}{16}{subsubsection.5.3.2}%
 \contentsline {subsubsection}{\numberline {5.3.3}Class Diagram}{16}{subsubsection.5.3.3}%
 \contentsline {section}{\numberline {6}Interfaces}{18}{section.6}%
-\contentsline {section}{\numberline {7}Software Architecture}{29}{section.7}%
-\contentsline {section}{\numberline {8}Software Implementation and Testing}{30}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Tools}{30}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Languages}{30}{subsection.8.2}%
-\contentsline {section}{\numberline {9}Testing}{31}{section.9}%
+\contentsline {section}{\numberline {7}Software Architecture}{27}{section.7}%
+\contentsline {section}{\numberline {8}Software Implementation and Testing}{28}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Tools}{28}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Languages}{28}{subsection.8.2}%
+\contentsline {section}{\numberline {9}Testing}{29}{section.9}%

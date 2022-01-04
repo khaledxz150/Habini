@@ -14,6 +14,12 @@
 \usepackage{array}
 \usepackage{wrapfig}
 \usepackage{multirow}
+\usepackage{multicol}
+
+\usepackage{graphicx}
+\usepackage{caption}
+
+\usepackage{graphicx}
 \graphicspath{ {figures/} }
 \usepackage{tabularx}
 \usepackage[usenames,dvipsnames]{xcolor}
@@ -117,7 +123,15 @@ Nowdays, almost all social media apps focus on people knowing who you are, we've
 Most social media platform are geared toward talking to people you already, or at least know they have something in common with you. There isn't a platform that allows you to share something that's not common between people and still get reactions and have some interactive experiences. At most there is a program as far as we can tell that links the posts you see geographically, there's features in some apps, but at that point the time line is so bloated that there's isn't roam for your niches.\\ 
 \subsection{Objective}
 5abini is an app that was built while focusing on privacy and intention to gather people with no social fear or anxiety to challenge them from the get go. \\ To  build an environment with confidence in confidentiality that allows you to share what you love, care about, ask questions and help people who do so. 5abini is geared into anonymous interactions, that will remove fear of social criticism and anxiety, as who you are will never be known. Make friends, get knowledge and share yours!
-
+\section{Web-Application(API) Secondary App made}
+\subsection{introduction and purpose}
+This Web-Application was made to personalize the experience of interacting with "5abini" for the University's students. Being able to use the program with no extra hassles such as signing up and fearing to forget your information has been all avoided by developing this Web-Application.
+\subsection{functions}
+This Web-Application's function is simple, take the user name and password  entered by the user, check if they match any record in the database, and if they do, return all necessary information that will help 5abini function up to its requirements.
+\subsection{scale}
+The Web-Application can be adjusted, re-engineered and modified easily depending on its users intent, as it's already hosted on the cloud and only needs the connected account and repository to be able to change it and upload it with the press of the button.
+\subsection{Database}
+The Database made for this Web-Application has also been hosted on Azure Services and can be modified easily and directly.
 
 
 \section{literature review}
@@ -130,9 +144,9 @@ As the biggest social media giant, we take it as granted that our information is
 The findings suggest that the cognitive and behavioral processes that characterize socially anxious face-to-face interaction are also evident in online communication. Suggestions are made for the clinical implications of such findings.\cite{firstone}
 \subsection{Privacy and Confidentiality}
 Most of the social media sites have information that's required, like your birthday and email address. Identity thieves tend to gather their victims’s personal information from the information available on the social media sites. They argue there is a persistent confusion between these two concepts and that privacy is an important but neglected ethical concept within human services. Many identity thieves tend to hack their victims email accounts by simply using the personal information available on social media profile.\cite{Confidentiality}
-
-
-\section{Requirement Elicitation}
+\subsection{Overall Solution Approach}
+xxxxxxxxxxxxxxxxx
+\section{ Requirement Engineering and Analysis}
 In this sections, many argue requirement elicitation is the most important in creating software, we will be using approaches proposed by Alexander and Beus-Dukic. \cite{Alexander}
 
 \subsection{Identifying stakeholders} 
@@ -149,9 +163,7 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \subsection{User requirements}
 \begin{enumerate}
 \itemsep0em 
-\item User shall be able to sign up.
-\item User shall be able to select an academy.
-\item User Shall be able to select their major.
+\item User shall be able to Sing in with their University portal information.
 \item User shall be able to post.
 \item User shall be able to delete their posts.
 \item User shall be able to delete their comments.
@@ -163,13 +175,13 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item User shall be able to up-vote comments.
 \item User shall be able to down-vote comments.
 \item User shall be able to search for posts he's interested in, through Hash-tags or keywords.
-\item User shall be named “Poster” when they post.
-\item User shall be Assigned a “Name” that reflects their position in the post, the first time they interact.
-\item User shall be able to track their activities.
+\item User shall be named "Me" on their posts, only they can see this name.
+\item User shall be able to track their posts.
+\item User shall be notified of activities on their posts.
 \item User shall be able to track activities on their posts.
-\item User shall be able to track activities on their comments.
 \item User shall be able to review posts from other users.
-\item User shall be able to sign out.
+\item User shall be able to change their avatar.
+\item User shall be able to sign out. 
 
 \end{enumerate}
 \subsection{System Requirements}
@@ -179,25 +191,19 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \subsubsection*{Security}
 \item Database security is world class, provided by Google itself.
 \item Flutter provides a secure data storage plugin for both the leading operating systems with the name of NSUserDefault for iOS and SharedPreferences for Android.
+\item Login Will be done through a WebApplication made to emulator the Universities DataBase, it will be engineered with Onion architecture to maintain security.
 \subsubsection*{System and User Interaction}
 
-\item User shall be able to sign up using their University number and Phone number.
-\item System will check for any University number duplication upon sign up, if the system finds any, user shall be notified with a warning message.
-\item User will have to confirm their identity with an OTP (One-Time-Password) that will be sent to confirm that they own the Phone number, and that it's correct.
-\item User shall be able to assign a password that will agree with password requirements.
-\item Passwords must use at least three of the four available character types: lowercase letters, uppercase letters, numbers, and symbols.
-\item User shall be able to sign in with their Phone number and the OTP that will be sent.
-\item User Shall be able to select the App’s theme after confirming their identity, the options will be “light-mode” and “dark-mode”.
-\item User shall be able to comment on each post with a different name, unless it’s in their own posts, it will always be “Poster”, that will also show when they comment.
-\item User that comment on a post will be given a name that reflects when they commented on the post (if they are the first to comment, their number will be @, second to comment will be @ Etc.)
+\item User shall be able to sign in using their University number and password and authenticated with phone number.
+\item User shall be notified with a warning message if information entered to sign in are incorrect.
+\item User will have to confirm their identity with an OTP (One-Time-Password) that will be sent to confirm that they own the Phone number registered in WebApplication, and that it's correct.
 \item User shall be able to report Posts by pressing the ellipsis button (three dots) on the post and selecting report. An interface will be shown, asking the user to select the reason for the report, and allowing the user to write his own personal reasoning and comments. The same procedure occurs with reporting comments.
-\item User shall be notified with a “Pop-up” of activities related to their posts and comments.
+\item User shall be notified in the notification panel of activities related to their posts.
 \item User shall be able to Up-vote and Down-vote posts and comments by pressing Either the Up-vote button (arrow head pointing to the top) or Down-vote button (arrow head pointing to the bottom)
-\item System shall only allow posts to last up to hours, user will have the option to select between and hours regarding his post availability.
+\item System shall only allow posts to last up to 24 hours, user will have the option to select between and hours regarding his post availability.
 \item User shall have an interface where they can see recent activities on their posts and comments that are still available.
 \subsubsection*{System properties}
 \item System should always be up, aside from maintenance
-
 \item User's time-line shall be shown depending on the Major and academy they choose.
 \item User shall be shown \# of posts, comments, upvotes, his most interacted post and recently available ones in the Account Interface.
 \item An Admin will be assigned for human involvement if needed, giving them permission to delete others posts and comments.
@@ -205,6 +211,8 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item System shall be able to handle 10000 thousand request at a time..
 \end{enumerate}
 \sectionbreak
+
+
 
 \begin{figure}[b]
 \section{Models and Diagrams}
@@ -221,13 +229,11 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item Enter OTP
 \item Click "Log in"
 \end{enumerate}
-\subsubsection*{Sign up}
+\subsubsection*{bad scenario}
 \begin{enumerate}
-\itemsep0em 
-\item Enter University ID
-\item Enter Phone number
-\item Enter OTP
-\item Click "Sign in"
+\itemsep0em
+\item Wrong university ID or wrong password
+\item error message
 
 \end{enumerate}
 \subsubsection*{Post}
@@ -236,6 +242,12 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item Enter content
 \item Set duration
 \end{enumerate} 
+\subsubsection*{bad scenario}
+\begin{enumerate}
+\itemsep0em 
+\item  Post is empty
+\item  error message
+\end{enumerate} 
 \subsubsection*{Comment}
 \begin{enumerate}
 \itemsep0em 
@@ -243,12 +255,24 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item Press comment Icon
 \item Enter content
 \end{enumerate} 
+\subsubsection*{bad scenario}
+\begin{enumerate}
+\itemsep0em 
+\item no content written
+\item nothing will be posted
+\end{enumerate} 
 \subsubsection*{Report}
 \begin{enumerate}
 \itemsep0em 
 \item Click arrow to open list on post
 \item Add report content
 \item Click "Report"
+\end{enumerate} 
+\subsubsection*{Bad scenario}
+\begin{enumerate}
+\itemsep0em 
+\item empty report
+\item error message
 \end{enumerate} 
 \subsubsection*{Upvote-Downvote}
 \begin{enumerate}
@@ -262,31 +286,6 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \item Click on "Settings"
 \item Click "Profile"
 \end{enumerate} 
-\subsubsection*{Delete account}
-\begin{enumerate}
-\itemsep0em 
-\item Click on "Settings"
-\item Click "Delete account"
-\item Confirm Identity with OTP
-\item Confirm delete
-\end{enumerate} 
-\subsubsection*{Change phone Number}
-\begin{enumerate}
-\itemsep0em 
-\item Click on "Settings"
-\item Click "Change phone"
-\item Confirm Identity with OTP on old number
-\item Enter new phone
-\item Confirm Identity with OTP on new number
-\end{enumerate}
-\subsubsection*{Change location}
-\begin{enumerate}
-\itemsep0em 
-\item Click on "Settings"
-\item Click "Location"
-\item Choose "A Facility
-\item Click "Change"
-\end{enumerate}
 \subsubsection*{Sign out}
 \begin{enumerate}
 \itemsep0em 
@@ -316,159 +315,146 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 \end{figure}
 
 \sectionbreak
-\vspace{+6em}
+
 \subsubsection{Class Diagram}
-\vspace{-1.4em}
+\vspace{-9.4em}
 \begin{figure}[h!]
-\centerline{\includegraphics[width=1.1\textwidth]{./ClassDiagram/ClassDiagram.PNG}}
+{\includegraphics[width=1.1\textwidth]{./ClassDiagram/ClassDiagram.PNG}}
   \caption{Class Diagrams}
 \end{figure}
 \sectionbreak
 \clearpage
-\begin{figure}[b!]
-\vspace{-2cm}
-\section{Interfaces}
-\subsection*{Loading the app}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/20.PNG}}
-  \caption{Opening the app from the app page}
-\end{figure}
-\begin{figure}[h!]
-\vspace{-2cm}
 
+
+\section{Interfaces}
+\begin{figure}[b!]
+
+\centering
+\captionsetup{justification=centering}
+\twocolumn
+\subsection*{Loading the app}
+\includegraphics[width=0.4\textwidth]{./Screenshots/20.PNG}
+\caption{Opening the app}
+\end{figure}
+
+
+\begin{figure}[h!]
 \subsection*{Home page}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/1.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/1.PNG}}
   \caption{Option to Sign-Up and Log-in, we'll go for sign up}
 \end{figure}
 
 
 \begin{figure}[h!]
-\vspace{-2cm}
 \subsection*{University ID Authentication}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/2.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/2.PNG}}
   \caption{empty section}
 \end{figure}
 
 
 \begin{figure}[h!]
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/3.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/4.PNG}}
   \caption{Entering an non-existing number}
 \end{figure}
 
 
 
 \begin{figure}[h!]
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/4.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/4.PNG}}
   \caption{Warning that it doesn't exist}
 \end{figure}
 
 
 
 \begin{figure}[h!]
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/5.PNG}}
-  \caption{entering a correct number will send us to the Phone page}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/5.PNG}}
+  \caption{entering a correct number and password will send us to the Phone page}
 \end{figure}
 
 
+
+
+
 \begin{figure}[h!]
-\vspace{-2cm}
 \subsection*{Phone Authentication}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/6.PNG}}
-  \caption{Adding a phone number, then receiving an OTP}
-\end{figure}
 
-
-\begin{figure}[h!]
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/7.PNG}}
-  \caption{enter phone, Click "Continue" to go to OTP}
-  \end{figure}
-
-
-\begin{figure}[h!]
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/8.PNG}}
-  \caption{OTP page}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/8.PNG}}
+  \caption{OTP Page is generated depending of the number response from API}
   \end{figure}
   
   
 \begin{figure}[h!]
-\vspace{-2cm}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/OTP.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/OTP.PNG}}
   \caption{Entering the correct OTP will send you to the homepage}
   \end{figure}
 
 \begin{figure}[h!]
-\vspace{-2cm}
   \subsection*{Loading page}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/9.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/9.PNG}}
   \caption{What you see while app is loading the homepage}
   \end{figure}
 
 
 \begin{figure}[t!]
-\vspace{-2cm}
   \subsection*{Home page}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/10.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/10.PNG}}
   \caption{This is the time-line page, pressing on Add post in navigation will send us to that page}
   \end{figure}
 
 \begin{figure}[t!]
-\vspace{-2cm}
   \subsection*{add post}
-\centerline{\includegraphics[width=0.7\textwidth]{./Screenshots/11.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/11.PNG}}
   \caption{Adding a post will require adding content and specifying a time}
 \end{figure}
 
 \begin{figure}[h!]
 
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/12.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/12.PNG}}
   \caption{Successful Post}
   \end{figure}
   \begin{figure}[h!]
-\vspace{-2cm}
   \subsection*{Home page again}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/13.PNG}}
-  \caption{Homepage after the post, notice that you're the "Owner", clicking on comment icon will send us to the comment/post page}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/13.PNG}}
+  \caption{Homepage after the post, notice that you're the "Owner" and it shows you "Me" to identify your posts, clicking on comment icon will send us to the comment/post page}
   \end{figure}
 
 \begin{figure}[h!]
-\vspace{-2cm}
   \subsection*{Post page/add review comments}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/14.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/14.PNG}}
   \caption{Here you can see the post, comments and add comments on your own}
   \end{figure}
 
 \begin{figure}[h!]
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/15.PNG}}
+\centerline{\includegraphics[width=0.4\textwidth]{./Screenshots/15.PNG}}
   \caption{Adding a comment then pressing the button next to it will add a comment}
   \end{figure}
 
 \begin{figure}[h!]
-\vspace{-2cm}
   \subsection*{Notification tab}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/16.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/16.PNG}}
   \caption{Here you will see the notification you'll receive as a pop-up}
   \end{figure}
   
   \begin{figure}[h!]
-\vspace{-2cm}
   \subsection*{Settings page}
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/17.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/17.PNG}}
   \caption{Here will you see many options that the user may need, clicking on Sign-out will log you out of your account session}
   \end{figure}
-  \begin{figure}[h!]
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/18.PNG}}
-  \caption{pressing Log-out}
-  \end{figure}  
+  
     \begin{figure}[h!]
-\centerline{\includegraphics[width=0.6\textwidth]{./Screenshots/1.PNG}}
+{\includegraphics[width=0.4\textwidth]{./Screenshots/1.PNG}}
   \caption{after pressing log-out}
   \end{figure}
-
-
-
-\clearpage
-\subsection{Software Architecture}
-\centerline{\includegraphics[width=1.1\textwidth]{./SoftwareArch/SoftwareArch.PNG}}
+  
+  
+  \clearpage
+\section{Software Architecture}
+{\includegraphics[width=1.1\textwidth]{./SoftwareArch/SoftwareArch.PNG}}
+\sectionbreak
+  \clearpage
 \section{Software Implementation and Testing}
+\subsection{Description of Implementation}
+5abini has already been hosted and tested on emulators and phones alike, the Web-Application has the same treatment, no servers are needed, only licenses that can be acquired from Google and Apple to be hosted on the appStore/PlayStore
 \subsection{Tools}
 \begin{itemize}
 \item Stream builder(Cutting edge, live, instant queries to keep all users up to date)
@@ -480,12 +466,26 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
   \item  Lucid Chard (Diagrams and models)
   \item  Draw.io (Diagrams and models)
   \item  Firebase Authentication (API's that are used for user Authentication) 
+\subsection{Web-Application}
+\item Microsoft Azure for hosting API and Database
+\item Microsoft SQL Server Management Studio 18
+\item PostMan
+\item Swagger
+\item Apache Jmeter
+\subsection{Architecture}
+\item Onion Architecture
 \subsection{Languages}
 \item Flutter
 \item Java.js
+\item C\#
+\item ASP.NET Core
+\item SQL
+
 \end{itemize}
+\clearpage
 
 \section{Testing}
+Due to the nature of the application Testing has only been done regressive and with Apache Jmeter to test the API load.
 \begin{table}[h!]
 \hskip-2.4cm\ \begin{tabular}{ |P{4cm}|P{5cm}|P{5cm}|P{4cm}| }
  \hline
@@ -509,7 +509,17 @@ Priorities is a name we can easily replace "5abini" with, as it's already (as a 
 1	&   Content entered and is not empty & post created \\ \hline
 2	&   Content is not entered and is  empty & post not created, user notified \\ \hline 
  \end{tabular}
+ 
  \end{table}
+ \clearpage	
+\section{ Conclusion and Results}
+In  prospect, 5abini, logically speaking can and will be good if published. during development we understood the positive impact it can have. Especially when it comes to privacy and social interaction that can be done on the platform as it's simplified. 
+\subsection{Summary of accomplished work}
+We as graduates, we managed to learn and to a high degree implement concepts we thought to be impossible to do with out knowledge, we used technologies we thought to be hard to use. We were able to
+\subsection{Future Work}
+This Whole project has been a great experience for all of use, nothing but quality knowledge and advancements in out professions. After this project will do our best to do a similar app that's more general use to the public with the same focus on privacy. This project has made us Extremely ambitious. 
 \bibliographystyle{plain}
 \bibliography{Citation}
 \end{document}
+
+

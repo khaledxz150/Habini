@@ -1,26 +1,26 @@
-\contentsline {figure}{\numberline {1}{\ignorespaces USE CASE\relax }}{12}{figure.caption.10}%
-\contentsline {figure}{\numberline {2}{\ignorespaces ER Diagram\relax }}{14}{figure.caption.22}%
-\contentsline {figure}{\numberline {3}{\ignorespaces Sign-up sequence\relax }}{15}{figure.caption.23}%
-\contentsline {figure}{\numberline {4}{\ignorespaces Sign-up sequence\relax }}{16}{figure.caption.24}%
-\contentsline {figure}{\numberline {5}{\ignorespaces Class Diagrams\relax }}{17}{figure.caption.25}%
-\contentsline {figure}{\numberline {6}{\ignorespaces Opening the app\relax }}{18}{figure.caption.26}%
-\contentsline {figure}{\numberline {7}{\ignorespaces Option to Sign-Up and Log-in, we'll go for sign up\relax }}{18}{figure.caption.28}%
-\contentsline {figure}{\numberline {8}{\ignorespaces empty section\relax }}{19}{figure.caption.30}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Entering an non-existing number\relax }}{19}{figure.caption.32}%
-\contentsline {figure}{\numberline {10}{\ignorespaces Warning that it doesn't exist\relax }}{20}{figure.caption.33}%
-\contentsline {figure}{\numberline {11}{\ignorespaces entering a correct number will send us to the Phone page\relax }}{20}{figure.caption.34}%
-\contentsline {figure}{\numberline {12}{\ignorespaces Adding a phone number, then receiving an OTP\relax }}{21}{figure.caption.35}%
-\contentsline {figure}{\numberline {13}{\ignorespaces enter phone, Click "Continue" to go to OTP\relax }}{21}{figure.caption.37}%
-\contentsline {figure}{\numberline {14}{\ignorespaces OTP page\relax }}{22}{figure.caption.38}%
-\contentsline {figure}{\numberline {15}{\ignorespaces Entering the correct OTP will send you to the homepage\relax }}{22}{figure.caption.39}%
-\contentsline {figure}{\numberline {16}{\ignorespaces What you see while app is loading the homepage\relax }}{23}{figure.caption.40}%
-\contentsline {figure}{\numberline {17}{\ignorespaces This is the time-line page, pressing on Add post in navigation will send us to that page\relax }}{23}{figure.caption.42}%
-\contentsline {figure}{\numberline {18}{\ignorespaces Adding a post will require adding content and specifying a time\relax }}{24}{figure.caption.44}%
-\contentsline {figure}{\numberline {19}{\ignorespaces Successful Post\relax }}{24}{figure.caption.46}%
-\contentsline {figure}{\numberline {20}{\ignorespaces Homepage after the post, notice that you're the "Owner", clicking on comment icon will send us to the comment/post page\relax }}{25}{figure.caption.47}%
-\contentsline {figure}{\numberline {21}{\ignorespaces Here you can see the post, comments and add comments on your own\relax }}{25}{figure.caption.49}%
-\contentsline {figure}{\numberline {22}{\ignorespaces Adding a comment then pressing the button next to it will add a comment\relax }}{26}{figure.caption.51}%
-\contentsline {figure}{\numberline {23}{\ignorespaces Here you will see the notification you'll receive as a pop-up\relax }}{26}{figure.caption.52}%
-\contentsline {figure}{\numberline {24}{\ignorespaces Here will you see many options that the user may need, clicking on Sign-out will log you out of your account session\relax }}{27}{figure.caption.54}%
-\contentsline {figure}{\numberline {25}{\ignorespaces pressing Log-out\relax }}{27}{figure.caption.56}%
-\contentsline {figure}{\numberline {26}{\ignorespaces after pressing log-out\relax }}{28}{figure.caption.57}%
+\contentsline {figure}{\numberline {1}{\ignorespaces USE CASE\relax }}{13}{figure.caption.10}%
+\contentsline {figure}{\numberline {2}{\ignorespaces ER Diagram\relax }}{15}{figure.caption.22}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Sign-up sequence\relax }}{16}{figure.caption.23}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Sign-up sequence\relax }}{17}{figure.caption.24}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Class Diagrams\relax }}{18}{figure.caption.25}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Opening the app\relax }}{19}{figure.caption.26}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Option to Sign-Up and Log-in, we'll go for sign up\relax }}{19}{figure.caption.28}%
+\contentsline {figure}{\numberline {8}{\ignorespaces empty section\relax }}{20}{figure.caption.30}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Entering an non-existing number\relax }}{20}{figure.caption.32}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Warning that it doesn't exist\relax }}{21}{figure.caption.33}%
+\contentsline {figure}{\numberline {11}{\ignorespaces entering a correct number will send us to the Phone page\relax }}{21}{figure.caption.34}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Adding a phone number, then receiving an OTP\relax }}{22}{figure.caption.35}%
+\contentsline {figure}{\numberline {13}{\ignorespaces enter phone, Click "Continue" to go to OTP\relax }}{22}{figure.caption.37}%
+\contentsline {figure}{\numberline {14}{\ignorespaces OTP page\relax }}{23}{figure.caption.38}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Entering the correct OTP will send you to the homepage\relax }}{23}{figure.caption.39}%
+\contentsline {figure}{\numberline {16}{\ignorespaces What you see while app is loading the homepage\relax }}{24}{figure.caption.40}%
+\contentsline {figure}{\numberline {17}{\ignorespaces This is the time-line page, pressing on Add post in navigation will send us to that page\relax }}{24}{figure.caption.42}%
+\contentsline {figure}{\numberline {18}{\ignorespaces Adding a post will require adding content and specifying a time\relax }}{25}{figure.caption.44}%
+\contentsline {figure}{\numberline {19}{\ignorespaces Successful Post\relax }}{25}{figure.caption.46}%
+\contentsline {figure}{\numberline {20}{\ignorespaces Homepage after the post, notice that you're the "Owner", clicking on comment icon will send us to the comment/post page\relax }}{26}{figure.caption.47}%
+\contentsline {figure}{\numberline {21}{\ignorespaces Here you can see the post, comments and add comments on your own\relax }}{26}{figure.caption.49}%
+\contentsline {figure}{\numberline {22}{\ignorespaces Adding a comment then pressing the button next to it will add a comment\relax }}{27}{figure.caption.51}%
+\contentsline {figure}{\numberline {23}{\ignorespaces Here you will see the notification you'll receive as a pop-up\relax }}{27}{figure.caption.52}%
+\contentsline {figure}{\numberline {24}{\ignorespaces Here will you see many options that the user may need, clicking on Sign-out will log you out of your account session\relax }}{28}{figure.caption.54}%
+\contentsline {figure}{\numberline {25}{\ignorespaces pressing Log-out\relax }}{28}{figure.caption.56}%
+\contentsline {figure}{\numberline {26}{\ignorespaces after pressing log-out\relax }}{29}{figure.caption.57}%

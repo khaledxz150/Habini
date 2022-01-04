@@ -449,7 +449,7 @@ class _KPostContainerState extends State<KPostContainer> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                widget.content,
+                widget.content,style: TextStyle(fontSize: 15.5),
               ),
             ),
           ),

@@ -480,16 +480,6 @@ class _CurrentPostState extends State<CurrentPost> {
                     padding: const EdgeInsets.only(top: 5.0, left: 5.0),
                     child: getUserAvatar(),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12, top: 6),
-                    child: Text(
-                      'Me',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
                 ],
               ),
               Row(

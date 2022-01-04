@@ -29,6 +29,7 @@ class _AddPostState extends State<AddPost> {
   String _postContent = null;
   int numberOfComments = 0;
   int numberOfVotes = 0;
+  int userFacility;
 
   final postTextController = TextEditingController();
 
@@ -37,6 +38,7 @@ class _AddPostState extends State<AddPost> {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
+    getUserFacility();
   }
 
   void getCurrentUser() {
@@ -48,6 +50,11 @@ class _AddPostState extends State<AddPost> {
     } catch (e) {
       print(e);
     }
+  }
+  getUserFacility()async {
+    await _firebase.collection('Users').doc(logedInUser.uid).get().then((value) {
+      userFacility =  value.data()['facility'];
+    });
   }
 
   Widget build(BuildContext context) {
@@ -67,6 +74,9 @@ class _AddPostState extends State<AddPost> {
         },
       );
     }
+
+
+
     return Scaffold(
       backgroundColor: Colors.white60,
       appBar: AppBar(
@@ -196,6 +206,7 @@ class _AddPostState extends State<AddPost> {
               elevation: 5.0,
               child: MaterialButton(
                 onPressed: () async {
+                  getUserFacility();
                   setState(() {
                     showSpinner = true;
                   });
@@ -220,7 +231,7 @@ class _AddPostState extends State<AddPost> {
                       ],
                     ).show();
                   }
-                  if (_postContent == null || _postContent.trim() == "" ) {
+                  if (_postContent == null || _postContent.trim() == "") {
                     setState(() {
                       showSpinner = false;
                     });
@@ -249,7 +260,7 @@ class _AddPostState extends State<AddPost> {
                     String id = _firebase.collection('Posts').doc().id;
 
                     try {
-                    await  _firebase.collection('Posts').doc(id).set({
+                      await _firebase.collection('Posts').doc(id).set({
                         'content': _postContent.toString(),
                         'poster': logedInUser.uid,
                         'sentOn': FieldValue.serverTimestamp(),
@@ -258,6 +269,7 @@ class _AddPostState extends State<AddPost> {
                         'duration': _defaultPostTime,
                         'phoneNumber': logedInUser.phoneNumber,
                         'postId': id,
+                        'PosterFacility':userFacility,
                       });
                       setState(() {
                         showSpinner = false;
@@ -284,8 +296,7 @@ class _AddPostState extends State<AddPost> {
                     }
                   }
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                      'navigation_page',
-                          (Route<dynamic> route) => false);
+                      'navigation_page', (Route<dynamic> route) => false);
                 },
                 minWidth: 100,
                 height: 42.0,

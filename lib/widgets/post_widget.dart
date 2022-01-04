@@ -294,86 +294,6 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                     Text(
                       timeAgo(posts.date.toDate()),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(right: 8.0),
-                    //   child: Container(
-                    //     width: 40,
-                    //     child: DropdownButton(
-                    //       isExpanded: true,
-                    //       items: [
-                    //         'Delete',
-                    //       ].map((String value) {
-                    //         return DropdownMenuItem(
-                    //           value: value,
-                    //           child: Text(value),
-                    //         );
-                    //       }).toList(),
-                    //       onChanged: (_) {
-                    //         Alert(
-                    //           context: context,
-                    //           type: AlertType.warning,
-                    //           title: "Delete your post",
-                    //           desc:
-                    //               "are you sure you want to delete your post ?",
-                    //           buttons: [
-                    //             DialogButton(
-                    //               child: Text(
-                    //                 "Yes",
-                    //                 style: TextStyle(
-                    //                     color: Colors.white, fontSize: 20),
-                    //               ),
-                    //               onPressed: () async {
-                    //                 // try {
-                    //                 //   await _firebase
-                    //                 //       .collection('Posts')
-                    //                 //       .doc(posts.postId)
-                    //                 //       .collection('Voters')
-                    //                 //       .get()
-                    //                 //       .then(
-                    //                 //         (snapshot) {
-                    //                 //       for (DocumentSnapshot ds
-                    //                 //       in snapshot.docs) {
-                    //                 //         ds.reference.delete();
-                    //                 //       }
-                    //                 //     },
-                    //                 //   );
-                    //                 //   await _firebase
-                    //                 //       .collection('Posts')
-                    //                 //       .doc(posts.postId)
-                    //                 //       .collection('Comments')
-                    //                 //       .get()
-                    //                 //       .then(
-                    //                 //         (snapshot) {
-                    //                 //       for (DocumentSnapshot ds
-                    //                 //       in snapshot.docs) {
-                    //                 //         ds.reference.delete();
-                    //                 //       }
-                    //                 //     },
-                    //                 //   );
-                    //                 //   await _firebase
-                    //                 //       .collection('Posts')
-                    //                 //       .doc(posts.postId)
-                    //                 //       .delete();
-                    //                 // } catch (e) {
-                    //                 //   print(e);
-                    //                 // }
-                    //                 // Navigator.pushAndRemoveUntil(
-                    //                 //   context,
-                    //                 //   MaterialPageRoute(
-                    //                 //     builder: (BuildContext context) =>
-                    //                 //         ProfilePage(),
-                    //                 //   ),
-                    //                 //       (route) => false,
-                    //                 // );
-                    //               },
-                    //               color: Color.fromRGBO(0, 179, 134, 1.0),
-                    //             ),
-                    //           ],
-                    //         ).show();
-                    //       },
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 )
               ],
@@ -400,7 +320,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  posts.content,
+                  posts.content,style: TextStyle(fontSize: 15.5),
                 ),
               ),
             ),
@@ -656,7 +576,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  posts.content,
+                  posts.content,style: TextStyle(fontSize: 15.5),
                 ),
               ),
             ),
@@ -697,7 +617,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                               storeNotificationUpVote();
                             },
                           ),
-                          // getVotes(),
+                          getVotes(),
                           IconButton(
                             icon: Icon(
                               Icons.arrow_drop_down,

@@ -13,8 +13,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 
 class OTPScreen extends StatefulWidget {
-  final String phone;
-  OTPScreen(this.phone);
+  final studentData;
+  OTPScreen(this.studentData);
 
   @override
   _State createState() => _State();
@@ -53,7 +53,7 @@ class _State extends State<OTPScreen> {
                   padding: const EdgeInsets.all(8.0),
                   margin: const EdgeInsets.all(3.0),
                   child: Text(
-                    'Verify ${widget.phone}',
+                    'Verify ${"+962" + widget.studentData.phoneNumber.toString()}',
                     style: GoogleFonts.koHo(
                       fontSize: 30,
                       color: Colors.white,
@@ -103,7 +103,9 @@ class _State extends State<OTPScreen> {
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => SaveUserData(),
+                                    builder: (context) => SaveUserData(
+                                      userData:widget.studentData,
+                                    ),
                                   ),
                                   (route) => false,
                                 );
@@ -142,7 +144,7 @@ class _State extends State<OTPScreen> {
 
   _verifyPhone() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: widget.phone,
+      phoneNumber: "+962" + widget.studentData.phoneNumber.toString(),
       verificationCompleted: (PhoneAuthCredential credential) async {
         await FirebaseAuth.instance
             .signInWithCredential(credential)

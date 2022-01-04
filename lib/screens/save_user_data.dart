@@ -7,6 +7,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 Color UniformColor = Color.fromRGBO(60, 174, 163, 1);
 
 final _auth = FirebaseAuth.instance;
@@ -17,36 +18,47 @@ String exists = '';
 
 final _firebase = FirebaseFirestore.instance;
 
-void storeUserData() async {
-  try {
-    _firebase.collection('Users').doc(uid).set({
-      'phoneNumber': logedIn.phoneNumber,
-      'UID': logedIn.uid,
-      'avatarUrl':'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fweb_hi_res_512.png?alt=media&token=07cfcead-28a4-400e-81c6-6c879139d26b',
-    });
-  } catch (e) {
-    print(e);
-  }
-}
 
-void getCurrentUser() {
-  try {
-    final user = _auth.currentUser;
-    if (user != null) {
-      logedIn = user;
-      uid = logedIn.uid;
-    }
-  } catch (e) {
-    print(e);
-  }
-}
 
 class SaveUserData extends StatefulWidget {
+  final userData;
+
+  SaveUserData({
+    this.userData,
+  });
+
   @override
   _SaveUserDataState createState() => _SaveUserDataState();
 }
 
 class _SaveUserDataState extends State<SaveUserData> {
+
+
+  void storeUserData() async {
+    try {
+      _firebase.collection('Users').doc(uid).set({
+      'phoneNumber': logedIn.phoneNumber,
+      'facility' :widget.userData.facilityId,
+      'UID': logedIn.uid,
+      'avatarUrl':
+      'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fweb_hi_res_512.png?alt=media&token=07cfcead-28a4-400e-81c6-6c879139d26b',
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        logedIn = user;
+        uid = logedIn.uid;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
   void initState() {
     super.initState();
     getCurrentUser();

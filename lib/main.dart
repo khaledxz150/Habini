@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:habini/screens/contact_us.dart';
+import 'package:habini/screens/faq_screen.dart';
 import 'package:habini/screens/profile_screen.dart';
 import 'package:habini/screens/save_user_data.dart';
 import 'package:habini/screens/sign_up_screen.dart';
@@ -30,7 +30,6 @@ class habini extends StatelessWidget {
       home: WelcomeScreen(),
       initialRoute: 'welcome_screen',
       routes: {
-        'contact_us_page': (context) =>ContactUs(),
         'profile_page': (context) => ProfilePage(),
         'save_user_data': (context) => SaveUserData(),
         'welcome_screen': (context) => WelcomeScreen(),
@@ -40,6 +39,7 @@ class habini extends StatelessWidget {
         'home_screen': (context) => HomeIndex(),
         'comments_screen': (context) => CommentsScreen(),
         'university_number_auth_screen': (context) => UniversityAuth(),
+        'faq_page': (context)=> FAQPage(),
       },
     );
   }

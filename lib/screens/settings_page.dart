@@ -58,7 +58,9 @@ class _SettingScreenState extends State<SettingScreen> {
               SettingsTile(
                 title: 'FAQ',
                 leading: Icon(Icons.question_answer),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) {
+                  Navigator.pushNamed(context, 'faq_page');
+                },
               ),
               // SettingsTile(
               //   title: 'Delete Account',

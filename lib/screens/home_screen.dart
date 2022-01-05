@@ -30,13 +30,17 @@ class HomeIndexState extends State<HomeIndex> {
   Future resultsLoaded;
   bool isLoad = true;
   bool meIs = false;
-  int userFacility;
+  var userFacility;
 
   TextEditingController _searchController = TextEditingController();
 
-  getUserFacility()async {
-    await _firebase.collection('Users').doc(logedInUser.uid).get().then((value) {
-      userFacility =  value.data()['facility'];
+  getUserFacility() async {
+    await _firebase
+        .collection('Users')
+        .doc(logedInUser.uid)
+        .get()
+        .then((value) {
+      userFacility = value.data()['facility'];
     });
   }
 
@@ -51,8 +55,10 @@ class HomeIndexState extends State<HomeIndex> {
   }
 
   getPosts() async {
+    await getUserFacility();
     var data = await _fireStore
-        .collection('Posts').where('PosterFacility',isEqualTo: userFacility)
+        .collection('Posts')
+        .where('PosterFacility', isEqualTo: userFacility)
         .orderBy('sentOn', descending: true)
         .get();
     setState(() {
@@ -210,9 +216,13 @@ class HomeIndexState extends State<HomeIndex> {
                         meIs = true;
                       }
                       if (_resultsList.isEmpty) {
+                        print("emp");
                         return Center(
                           child: Container(
-                            child: Text('There is no posts yet :('),
+                            child: Text(
+                              'There is no posts yet :(',
+                              style: TextStyle(fontSize: 50),
+                            ),
                           ),
                         );
                       }
@@ -223,7 +233,9 @@ class HomeIndexState extends State<HomeIndex> {
                           document: _resultsList[index],
                         );
                       } catch (e) {
-                        return CircularProgressIndicator();
+                        return Container(
+                          child: Text('No Posts In this facility'),
+                        );
                       }
                     },
                   ),

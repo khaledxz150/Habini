@@ -51,7 +51,9 @@ class _SettingScreenState extends State<SettingScreen> {
               SettingsTile(
                 title: 'Contact us',
                 leading: Icon(Icons.contact_mail_outlined),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) {
+                  Navigator.pushNamed(context, 'contact_us_page');
+                },
               ),
               SettingsTile(
                 title: 'FAQ',

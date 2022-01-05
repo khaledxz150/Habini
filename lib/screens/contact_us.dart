@@ -26,6 +26,25 @@ class _ContactUsState extends State<ContactUs> {
   final contactUs = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = _auth.currentUser;
+
+      if (user != null) {
+        logedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -97,9 +116,27 @@ class _ContactUsState extends State<ContactUs> {
             KmaterialButton(
               label: 'Submit',
               onPressed: () async {
-                setState(() {
-                  showSpinner = true;
-                });
+                if (_contactUs == null || _contactUs.trim() == "") {
+                  setState(() {
+                    showSpinner = false;
+                  });
+                  Alert(
+                    context: context,
+                    type: AlertType.warning,
+                    title: "Post Alert",
+                    desc: "Why so empty... ",
+                    buttons: [
+                      DialogButton(
+                        child: Text(
+                          "Back",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                        width: 120,
+                      ),
+                    ],
+                  ).show();
+                } else {
                   setState(() {
                     showSpinner = true;
                   });
@@ -132,24 +169,9 @@ class _ContactUsState extends State<ContactUs> {
                     ).show();
                   } catch (ex) {
                     showSpinner = false;
-                    Alert(
-                      context: context,
-                      type: AlertType.error,
-                      title: "Connection error",
-                      desc: "Please check your internet connection",
-                      buttons: [
-                        DialogButton(
-                          child: Text(
-                            "Back",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                          width: 120,
-                        ),
-                      ],
-                    ).show();
+                    print(ex);
                   }
-
+                }
               },
               color: UniformColor,
             ),

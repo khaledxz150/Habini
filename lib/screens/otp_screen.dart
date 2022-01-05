@@ -153,7 +153,9 @@ class _State extends State<OTPScreen> {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => SaveUserData(),
+                builder: (context) => SaveUserData(
+                  userData:widget.studentData,
+                ),
               ),
               (route) => false,
             );

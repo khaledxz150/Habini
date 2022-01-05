@@ -58,6 +58,7 @@ class _State extends State<UniversityAuth> {
         );
       }
       if (response.statusCode == 200) {
+        print(data);
         String responseString = response.body;
         return userDataFromJson(responseString);
       }
@@ -190,6 +191,7 @@ class _State extends State<UniversityAuth> {
                                   setState(() {
                                     _userData = data;
                                   });
+
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => OTPScreen(_userData),

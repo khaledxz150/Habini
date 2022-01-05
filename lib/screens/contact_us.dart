@@ -15,12 +15,13 @@ class ContactUs extends StatefulWidget {
   @override
   _ContactUsState createState() => _ContactUsState();
 }
+
 bool showSpinner = false;
 
 class _ContactUsState extends State<ContactUs> {
-  String _contactUs  ;
-  String _email ;
+  String _contactUs;
 
+  String _email;
 
   final contactUs = TextEditingController();
 
@@ -28,26 +29,27 @@ class _ContactUsState extends State<ContactUs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: UniformColor,
-          title: Row(
-            children: [
-              Icon(
-                Icons.contact_mail_outlined,
-              ),
-              SizedBox(
-                width: 20.0,
-              ),
-              Center(
-                child: Text(
-                  'Contact Us',
-                  style: GoogleFonts.koHo(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
+        backgroundColor: UniformColor,
+        title: Row(
+          children: [
+            Icon(
+              Icons.contact_mail_outlined,
+            ),
+            SizedBox(
+              width: 20.0,
+            ),
+            Center(
+              child: Text(
+                'Contact Us',
+                style: GoogleFonts.koHo(
+                  color: Colors.white,
+                  fontSize: 25,
                 ),
               ),
-            ],
-          ),),
+            ),
+          ],
+        ),
+      ),
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: ListView(
@@ -98,48 +100,6 @@ class _ContactUsState extends State<ContactUs> {
                 setState(() {
                   showSpinner = true;
                 });
-                if (logedInUser == null) {
-                  setState(() {
-                    showSpinner = false;
-                  });
-                  Alert(
-                    context: context,
-                    type: AlertType.error,
-                    title: "Login Alert",
-                    desc: "Please Login First",
-                    buttons: [
-                      DialogButton(
-                        child: Text(
-                          "Cancel",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        onPressed: () => Navigator.pop(context),
-                        width: 120,
-                      )
-                    ],
-                  ).show();
-                }
-                if (_contactUs == null || _contactUs.trim() == "") {
-                  setState(() {
-                    showSpinner = false;
-                  });
-                  Alert(
-                    context: context,
-                    type: AlertType.warning,
-                    title: "contact us",
-                    desc: "please write something",
-                    buttons: [
-                      DialogButton(
-                        child: Text(
-                          "Back",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        onPressed: () => Navigator.pop(context),
-                        width: 120,
-                      ),
-                    ],
-                  ).show();
-                } else {
                   setState(() {
                     showSpinner = true;
                   });
@@ -181,8 +141,7 @@ class _ContactUsState extends State<ContactUs> {
                         DialogButton(
                           child: Text(
                             "Back",
-                            style:
-                            TextStyle(color: Colors.white, fontSize: 20),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                           onPressed: () => Navigator.pop(context),
                           width: 120,
@@ -190,7 +149,6 @@ class _ContactUsState extends State<ContactUs> {
                       ],
                     ).show();
                   }
-                }
 
               },
               color: UniformColor,

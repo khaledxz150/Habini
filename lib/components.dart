@@ -145,6 +145,7 @@ class _KPostContainerState extends State<KPostContainer> {
   bool upVote = false;
   String reportContent = null;
   bool isVoted;
+  int userName = 0;
 
   bool showSpinner = false;
   final _firebase = FirebaseFirestore.instance;
@@ -285,9 +286,15 @@ class _KPostContainerState extends State<KPostContainer> {
       },
     );
   }
+  Future<void> getUserName() async {
+    DocumentSnapshot snapshot =
+    await _firebase.collection('Users').doc(widget.poster).get();
+    userName = await snapshot['userName'];
+  }
 
   @override
   Widget build(BuildContext context) {
+    getUserName();
     getData();
     return Container(
       decoration: BoxDecoration(
@@ -314,6 +321,16 @@ class _KPostContainerState extends State<KPostContainer> {
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0, left: 5.0),
                     child: getUserAvatar(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0, left: 10.0),
+                    child: Container(
+                      child: Text(
+                        userName.toString(),
+                        style: TextStyle(
+                          fontSize: 19,),
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 12, top: 6),
@@ -591,6 +608,7 @@ class KComment extends StatefulWidget {
 class _KCommentState extends State<KComment> {
   @override
   bool isVoted;
+  int userName = 0;
 
   @override
   void initState() {
@@ -713,11 +731,21 @@ class _KCommentState extends State<KComment> {
     );
   }
 
+
   Widget build(BuildContext context) {
+
+    Future<void> getUserName() async {
+      DocumentSnapshot snapshot =
+      await _firebase.collection('Users').doc(widget.commenter).get();
+      userName = await snapshot['userName'];
+    }
+
     var dropDownValue;
     setState(() {
       getData();
     });
+    getUserName();
+
     if (logedInUser.uid == widget.poster && widget.poster == widget.commenter) {
       return Container(
         padding: EdgeInsets.all(10),
@@ -732,6 +760,15 @@ class _KCommentState extends State<KComment> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0, left: 5.0),
                       child: getUserAvatar(),
+                    ),Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 10.0),
+                      child: Container(
+                        child: Text(
+                          userName.toString(),
+                          style: TextStyle(
+                            fontSize: 19,),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 12, top: 6),
@@ -1010,6 +1047,16 @@ class _KCommentState extends State<KComment> {
                       child: getUserAvatar(),
                     ),
                     Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 10.0),
+                      child: Container(
+                        child: Text(
+                          userName.toString(),
+                          style: TextStyle(
+                            fontSize: 19,),
+                        ),
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.only(left: 12, top: 6),
                       child: Text(
                         'Me',
@@ -1271,9 +1318,23 @@ class _KCommentState extends State<KComment> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                  child: getUserAvatar(),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                      child: getUserAvatar(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 10.0),
+                      child: Container(
+                        child: Text(
+                          userName.toString(),
+                          style: TextStyle(
+                            fontSize: 19,),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -1529,6 +1590,16 @@ class _KCommentState extends State<KComment> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0, left: 5.0),
                       child: getUserAvatar(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 10.0),
+                      child: Container(
+                        child: Text(
+                          userName.toString(),
+                          style: TextStyle(
+                            fontSize: 19,),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 12, top: 6),
@@ -1800,9 +1871,23 @@ class _KCommentState extends State<KComment> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                  child: getUserAvatar(),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                      child: getUserAvatar(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 10.0),
+                      child: Container(
+                        child: Text(
+                          userName.toString(),
+                          style: TextStyle(
+                            fontSize: 19,),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

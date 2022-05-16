@@ -31,6 +31,8 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
   bool downVote = false;
   bool upVote = false;
   int votes = 0;
+  int userName = 0;
+
   String reportContent = null;
   final reportTextController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
@@ -43,6 +45,8 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
     getCurrentUser();
     getVotes();
   }
+
+
 
   getData() async {
     DocumentSnapshot votes = await _firebase
@@ -152,6 +156,12 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
     getData();
     final posts = Posts.fromSnapshot(widget.document);
 
+    Future<void> getUserName() async {
+      DocumentSnapshot snapshot =
+      await _firebase.collection('Users').doc(posts.poster).get();
+      userName = await snapshot['userName'];
+    }
+
     storeNotificationUpVote() {
       _firebase.collection('Notifications').doc().set({
         'to': posts.poster,
@@ -225,19 +235,16 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();
-              }
-              else if (snapshot.hasError) {
+              } else if (snapshot.hasError) {
                 return Center(child: Text(snapshot.error.toString()));
               }
               var userDocument = snapshot.data;
               String result;
-              if (userDocument["numOfComments"].toString()==null){
+              if (userDocument["numOfComments"].toString() == null) {
                 result = "";
+              } else {
+                result = userDocument["numOfComments"].toString();
               }
-              else
-                {
-                  result = userDocument["numOfComments"].toString();
-                }
               return new Text(result);
             },
           );
@@ -246,7 +253,7 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
         }
       }
     }
-
+    getUserName();
     if (logedInUser.uid == posts.poster) {
       return Container(
         decoration: BoxDecoration(
@@ -273,6 +280,16 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0, left: 5.0),
                       child: getUserAvatar(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 10.0),
+                      child: Container(
+                        child: Text(
+                          userName.toString(),
+                          style: TextStyle(
+                            fontSize: 19, ),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 12, top: 6),
@@ -320,7 +337,8 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  posts.content,style: TextStyle(fontSize: 15.5),
+                  posts.content,
+                  style: TextStyle(fontSize: 15.5),
                 ),
               ),
             ),
@@ -447,9 +465,23 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                  child: getUserAvatar(),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 5.0),
+                      child: getUserAvatar(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0, left: 10.0),
+                      child: Container(
+                        child: Text(
+                          userName.toString(),
+                          style: TextStyle(
+                              fontSize: 19,),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Row(
                   children: <Widget>[
@@ -576,7 +608,8 @@ class _KPostContainerV2State extends State<KPostContainerV2> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  posts.content,style: TextStyle(fontSize: 15.5),
+                  posts.content,
+                  style: TextStyle(fontSize: 15.5),
                 ),
               ),
             ),

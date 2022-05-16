@@ -81,7 +81,7 @@ class _SaveUserDataState extends State<SaveUserData> {
 
   Future<String> checkExist() async {
     try {
-      await _firebase.doc("Users/$uid").get().then((doc) {
+      await _firebase.collection('Users').doc(logedIn.uid).get().then((doc) {
         if (doc.exists) {
           exists = 'Welcome Back';
           Future.delayed(const Duration(milliseconds: 3200), () {

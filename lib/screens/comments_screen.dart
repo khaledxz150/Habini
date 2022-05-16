@@ -310,6 +310,7 @@ class _CurrentPostState extends State<CurrentPost> {
   bool upVote = false;
   String reportContent = null;
   bool isVoted;
+  int userName = 0;
 
   bool showSpinner = false;
   final _firebase = FirebaseFirestore.instance;
@@ -453,7 +454,13 @@ class _CurrentPostState extends State<CurrentPost> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> getUserName() async {
+      DocumentSnapshot snapshot =
+      await _firebase.collection('Users').doc(widget.poster).get();
+      userName = await snapshot['userName'];
+    }
     getData();
+    getUserName();
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -479,6 +486,16 @@ class _CurrentPostState extends State<CurrentPost> {
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0, left: 5.0),
                     child: getUserAvatar(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0, left: 10.0),
+                    child: Container(
+                      child: Text(
+                        userName.toString(),
+                        style: TextStyle(
+                          fontSize: 19,),
+                      ),
+                    ),
                   ),
                 ],
               ),

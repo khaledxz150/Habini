@@ -44,9 +44,14 @@ class _State extends State<UniversityAuth> {
   @override
   Widget build(BuildContext context) {
     Future<UserData> studentData() async {
+
+      final queryParameters = {
+        'Username': studentId,
+        'Password': password,
+      };
       var response = await http.post(
-        Uri.https('hashemiteuni.azurewebsites.net',
-            'api/Student/IfStudent/$studentId/$password'),
+        Uri.https('abiniapi.azure-api.net',
+            '/v1/api/Student/ViewStudent',queryParameters),
       );
       var data = response.body;
       if (data.isEmpty){

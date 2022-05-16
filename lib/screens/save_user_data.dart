@@ -15,10 +15,9 @@ final _auth = FirebaseAuth.instance;
 User logedIn;
 var uid;
 String exists = '';
+int numUserName = 0;
 
 final _firebase = FirebaseFirestore.instance;
-
-
 
 class SaveUserData extends StatefulWidget {
   final userData;
@@ -33,15 +32,28 @@ class SaveUserData extends StatefulWidget {
 
 class _SaveUserDataState extends State<SaveUserData> {
 
+  Future generateUserNickName() async {
+    QuerySnapshot querySnapshot = await _firebase.collection('Users').get();
+    int numberOfUsers = querySnapshot.docs.length;
+    if (numberOfUsers == 0){
+      numUserName = 1;
+    }
+    else {
+      numUserName = numberOfUsers + 1;
+    }
+   }
 
   void storeUserData() async {
+   await generateUserNickName();
+    print(numUserName);
     try {
       _firebase.collection('Users').doc(uid).set({
-      'phoneNumber': logedIn.phoneNumber,
-      'facility' :widget.userData.facilityId,
-      'UID': logedIn.uid,
-      'avatarUrl':
-      'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fweb_hi_res_512.png?alt=media&token=07cfcead-28a4-400e-81c6-6c879139d26b',
+        'userName':numUserName,
+        'phoneNumber': logedIn.phoneNumber,
+        'facility': widget.userData.facilityId,
+        'UID': logedIn.uid,
+        'avatarUrl':
+            'https://firebasestorage.googleapis.com/v0/b/abini-199cc.appspot.com/o/Avatars%2Fweb_hi_res_512.png?alt=media&token=07cfcead-28a4-400e-81c6-6c879139d26b',
       });
     } catch (e) {
       print(e);
@@ -59,6 +71,7 @@ class _SaveUserDataState extends State<SaveUserData> {
       print(e);
     }
   }
+
   void initState() {
     super.initState();
     getCurrentUser();
